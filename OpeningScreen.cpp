@@ -7,10 +7,15 @@ void closeItAll(sf::RenderWindow &app) {
 	exit(0);
 }
 
+void switchMeIp(sf::RenderWindow &app) {
+	std::cout << "switching screens" << std::endl;
+}
+
 int OpeningScreen::Run(sf::RenderWindow &app) {
 
 	ButtonActions allBtnActions;
     allBtnActions.update_keybind(0, &closeItAll);
+    allBtnActions.update_keybind(1, &switchMeIp);
 
 
 	sf::Event event;
@@ -22,12 +27,12 @@ int OpeningScreen::Run(sf::RenderWindow &app) {
 		 sf::Color::Red, app.getSize().x/30,0);
 	
 	Button LocalPlay("Local", sf::Vector2f(app.getSize().x/2.5, app.getSize().y/2), 
-		sf::Vector2f(app.getSize().x/6, app.getSize().y/10), sf::Color::Blue, app.getSize().x/18,0);
+		sf::Vector2f(app.getSize().x/6, app.getSize().y/10), sf::Color::Blue, app.getSize().x/18,1);
 
 	Button MultiPlay("Multi", sf::Vector2f(app.getSize().x/2.5, app.getSize().y/2+app.getSize().y/10+50), 
 		sf::Vector2f(app.getSize().x/6, app.getSize().y/10), sf::Color::Blue, app.getSize().x/18,0);
 
-	Text title("Codenames", sf::Vector2f(app.getSize().x/5, app.getSize().y/14), sf::Color::White,
+	Text title("Codenames", sf::Vector2f(app.getSize().x/5, app.getSize().y/13), sf::Color::White,
 	 app.getSize().x/10,"fonts/Xpressive Regular.ttf");
 	Text menu("Menu", sf::Vector2f(app.getSize().x/2.5, app.getSize().y/4), sf::Color::Blue,
 	 app.getSize().x/12,"fonts/Xpressive Regular.ttf");
@@ -44,6 +49,11 @@ int OpeningScreen::Run(sf::RenderWindow &app) {
 		while(app.pollEvent(event)) {
 
 			QuitButton.checkClick(app, allBtnActions);
+
+			if(LocalPlay.checkClick(app, allBtnActions)) {
+				return 1;
+			}
+
 			if(event.type == sf::Event::Closed) { //If Wind Closed
 				std::cout << "Closing Opening Screen" << std::endl;
 				return -1;

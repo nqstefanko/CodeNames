@@ -1,0 +1,4 @@
+List of verts and sorted by val. Biggest first. O(M+N)
+O(N+N^1.5)==O(1.5)
+O(The)
+ sorted list is the top order. ONlog > 
