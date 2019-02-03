@@ -8,7 +8,11 @@ void closeItAllNow(sf::RenderWindow &app) {
 
 void openSpyMasterBoard(sf::RenderWindow &app) {
 	SpyMasterBoardScreen smbs;
-	smbs.Run(app);
+	int temp = 2;
+	while(temp > 0) {
+		temp = smbs.Run(app);
+	}
+
 }
 
 
@@ -67,9 +71,10 @@ int PlayBoardScreen::Run(sf::RenderWindow &app) {
 			SpymasterButton.checkClick(app, allBtnActions);
 
 			if(event.type == sf::Event::Closed) { //If Wind Closed
-				std::cout << "Closing Opening Screen" << std::endl;
+				std::cout << "Closing PlayBoard Screen" << std::endl;
 				return -1;
 			}
+
 			
 			app.display();
 		}

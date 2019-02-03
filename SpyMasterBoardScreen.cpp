@@ -51,70 +51,66 @@ std::vector<std::vector<int>> SpyMasterBoardScreen::makeTheBoard() {
 int SpyMasterBoardScreen::Run(sf::RenderWindow &app) {
 	sf::RenderWindow window(sf::VideoMode(1600, 900), "SpymasterBoard");
 
-	ButtonActions allBtnActions;
-    allBtnActions.update_keybind(0, &canCloseItAll);
+	//ButtonActions allBtnActions;
+    //allBtnActions.update_keybind(0, &canCloseItAll);
 
-	std::vector<std::vector<int>> s = makeTheBoard();
-	for(int i = 0; i < 5; ++i) {
-		for(int j = 0; j < 5; ++j) {
-			std::cout << s[i][j] << " ";
-		}
-		std::cout << std::endl;
-	}
-
+	//std::vector<std::vector<int>> s = makeTheBoard();
+	// for(int i = 0; i < 5; ++i) {
+	// 	for(int j = 0; j < 5; ++j) {
+	// 		std::cout << s[i][j] << " ";
+	// 	}
+	// 	std::cout << std::endl;
+	// }
 	sf::Event event;
 	bool running = true;
 	window.clear(sf::Color::Black);
-	Button QuitButton("Close", sf::Vector2f(0, 0), sf::Vector2f(window.getSize().x/8, window.getSize().y/15),
-		 sf::Color::Red, window.getSize().x/30,0);
-	QuitButton.draw(window);
-	int count = 0;
+	// Button QuitButton("Close", sf::Vector2f(0, 0), sf::Vector2f(window.getSize().x/8, window.getSize().y/15),
+	// 	 sf::Color::Red, window.getSize().x/30,0);
+	// QuitButton.draw(window);
+	// int count = 0;
 
-	for(int i = 0; i < 5;++i) {
-		for(int j = 0; j < 5;++j) {
-			sf::Color todo=sf::Color::White;
-			if(s[i][j] == 0) {
-				todo = sf::Color::Red;
-			} else if(s[i][j] == 1) {
-				todo = sf::Color::Blue;
-			} else if(s[i][j] == 2) {
-				todo = sf::Color::Black;
-			}
-			sf::Vector2f tempButtonSize(window.getSize().x/8, window.getSize().y/10);
-			sf::Vector2f tempButtonLoc(100+window.getSize().x/8+(j*50)+((window.getSize().x/8)*j),
-                    50+window.getSize().y/10+(40*i)+((app.getSize().y/10)*i));
+	// for(int i = 0; i < 5;++i) {
+	// 	for(int j = 0; j < 5;++j) {
+	// 		sf::Color todo=sf::Color::White;
+	// 		if(s[i][j] == 0) {
+	// 			todo = sf::Color::Red;
+	// 		} else if(s[i][j] == 1) {
+	// 			todo = sf::Color::Blue;
+	// 		} else if(s[i][j] == 2) {
+	// 			todo = sf::Color::Black;
+	// 		}
+	// 		sf::Vector2f tempButtonSize(window.getSize().x/8, window.getSize().y/10);
+	// 		sf::Vector2f tempButtonLoc(100+window.getSize().x/8+(j*50)+((window.getSize().x/8)*j),
+ //                    50+window.getSize().y/10+(40*i)+((app.getSize().y/10)*i));
 
-			Button tempBtn("",tempButtonLoc,tempButtonSize, todo,
-				window.getSize().x/38,count);
+	// 		Button tempBtn("",tempButtonLoc,tempButtonSize, todo,
+	// 			window.getSize().x/38,count);
 
-			sf::Vector2f theShift(tempButtonLoc.x, 
-				tempButtonLoc.y + 2*(window.getSize().y/100));
-			std::cout << theShift.x << " " << theShift.y << std::endl;
-			tempBtn.shiftTextInside(theShift, window);
-			// temp.push_back(tempBtn);
-			tempBtn.draw(window);
-			count++;
-		}
-	}
+	// 		sf::Vector2f theShift(tempButtonLoc.x, 
+	// 			tempButtonLoc.y + 2*(window.getSize().y/100));
+	// 		std::cout << theShift.x << " " << theShift.y << std::endl;
+	// 		tempBtn.shiftTextInside(theShift, window);
+	// 		// temp.push_back(tempBtn);
+	// 		tempBtn.draw(window);
+	// 		count++;
+	// 	}
+	// }
 
 
     // run the program as long as the window is open
-    while (window.isOpen())
-    {
-        // check all the window's events that were triggered since the last iteration of the loop
-        sf::Event event;
-        QuitButton.checkClick(window, allBtnActions);
 
-        while (window.pollEvent(event))
-        {
-            // "close requested" event: we close the window
-            if (event.type == sf::Event::Closed)
-                window.close();
-        	window.display();
-        }
-       	
-    }
+	while(running) {
+		while(window.pollEvent(event)) {
 
+			if(event.type == sf::Event::Closed) { //If Wind Closed
+				std::cout << "Closing PlayBoard Screen" << std::endl;
+				return -1;
+			}
+
+			
+			window.display();
+		}
+	}
 	return 0;
 }
 

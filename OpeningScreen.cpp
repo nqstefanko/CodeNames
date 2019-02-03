@@ -29,8 +29,8 @@ int OpeningScreen::Run(sf::RenderWindow &app) {
 	Button LocalPlay("Local", sf::Vector2f(app.getSize().x/2.5, app.getSize().y/2), 
 		sf::Vector2f(app.getSize().x/6, app.getSize().y/10), sf::Color::Blue, app.getSize().x/18,1);
 
-	Button MultiPlay("Multi", sf::Vector2f(app.getSize().x/2.5, app.getSize().y/2+app.getSize().y/10+50), 
-		sf::Vector2f(app.getSize().x/6, app.getSize().y/10), sf::Color::Blue, app.getSize().x/18,0);
+	//Button MultiPlay("Multi", sf::Vector2f(app.getSize().x/2.5, app.getSize().y/2+app.getSize().y/10+50), 
+		//sf::Vector2f(app.getSize().x/6, app.getSize().y/10), sf::Color::Blue, app.getSize().x/18,0);
 
 	Text title("Codenames", sf::Vector2f(app.getSize().x/5, app.getSize().y/13), sf::Color::White,
 	 app.getSize().x/10,"fonts/Xpressive Regular.ttf");
@@ -40,7 +40,7 @@ int OpeningScreen::Run(sf::RenderWindow &app) {
 
 	QuitButton.draw(app);
 	LocalPlay.draw(app);
-	MultiPlay.draw(app);
+	//MultiPlay.draw(app);
 	title.draw(app);
 	menu.draw(app);
 
@@ -52,6 +52,7 @@ int OpeningScreen::Run(sf::RenderWindow &app) {
 
 			if(LocalPlay.checkClick(app, allBtnActions)) {
 				return 1;
+				break;
 			}
 
 			if(event.type == sf::Event::Closed) { //If Wind Closed
