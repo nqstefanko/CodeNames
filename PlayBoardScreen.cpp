@@ -1,4 +1,8 @@
 #include "PlayBoardScreen.hpp"
+#include <thread>
+#include <SFML/System.hpp>
+
+
 PlayBoardScreen::PlayBoardScreen(){}
 
 void closeItAllNow(sf::RenderWindow &app) {
@@ -6,14 +10,42 @@ void closeItAllNow(sf::RenderWindow &app) {
 	exit(0);
 }
 
-void openSpyMasterBoard(sf::RenderWindow &app) {
-	SpyMasterBoardScreen smbs;
-	int temp = 2;
-	while(temp > 0) {
-		temp = smbs.Run(app);
-	}
+void spawn()
+{
+	//SpyMasterBoardScreen smbs;
+	for (int i = 0; i < 10; ++i)
+        std::cout << "I'm thread number one" << std::endl;
+    sf::Event event;
+    sf::RenderWindow w(sf::VideoMode(400, 400), "tits" );
+    //w.setActive(true);
+    
+    //smbs.drawOnBoard(w);
 
+    while (w.isOpen())
+    {
+    	std::cout << "fa";
+        while (w.pollEvent(event))
+            if (event.type == sf::Event::Closed) {
+            	w.close();
+            	return;
+            }
+
+
+        w.display();
+        w.clear();
+    }
+        
 }
+// void openSpyMasterBoard(sf::RenderWindow &app) {
+// 	std::thread(&spawn , "WINDOW #2" ).detach();
+
+// 	// SpyMasterBoardScreen smbs;
+// 	// int temp = 2;
+// 	// while(temp > 0) {
+// 	// 	temp = smbs.Run(app);
+// 	// }
+
+// }
 
 
 
@@ -61,14 +93,26 @@ int PlayBoardScreen::Run(sf::RenderWindow &app) {
 
 	ButtonActions allBtnActions;
     allBtnActions.update_keybind(0, &closeItAllNow);
-    allBtnActions.update_keybind(1, &openSpyMasterBoard);
+    //allBtnActions.update_keybind(1, &openSpyMasterBoard);
 
-
+    bool l = false;
 	while(running) {
 		while(app.pollEvent(event)) {
 
-			QuitButton.checkClick(app, allBtnActions);
-			SpymasterButton.checkClick(app, allBtnActions);
+
+			if(QuitButton.checkClick(app)) {
+				allBtnActions.key_pressed(QuitButton.buttonId, app);//Do associated action with button
+			}
+			if(SpymasterButton.checkClick(app)) {
+				//allBtnActions.key_pressed_event(SpymasterButton.buttonId, event);//Do associated action with button
+				if(l == false) {
+					sf::Thread thread(&spawn);
+    				thread.launch();
+    				l=true;
+				}
+
+			}				
+			//SpymasterButton.checkClick(app, allBtnActions);
 
 			if(event.type == sf::Event::Closed) { //If Wind Closed
 				std::cout << "Closing PlayBoard Screen" << std::endl;

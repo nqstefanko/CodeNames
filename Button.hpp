@@ -16,7 +16,7 @@ public:
 	int buttonId;
 	Button(std::string displayText, sf::Vector2f location, sf::Vector2f size,
 		const sf::Color & color, int fontSize, int newBid);
-	bool checkClick (sf::RenderWindow &window, ButtonActions &actions);
+	bool checkClick (sf::RenderWindow &window);
 	void draw(sf::RenderWindow &window);
 	void shiftTextInside(sf::Vector2f &shift, sf::RenderWindow &window);
 

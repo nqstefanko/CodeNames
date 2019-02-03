@@ -47,6 +47,41 @@ std::vector<std::vector<int>> SpyMasterBoardScreen::makeTheBoard() {
 	}
 	return toRet;
 }
+void  SpyMasterBoardScreen::drawOnBoard(sf::RenderWindow &window) {
+
+	Button QuitButton("Close", sf::Vector2f(0, 0), sf::Vector2f(window.getSize().x/8, window.getSize().y/15),
+			 sf::Color::Red, window.getSize().x/30,0);
+	QuitButton.draw(window);
+	int count = 0;
+	std::vector<std::vector<int>> s = makeTheBoard();
+	for(int i = 0; i < 5;++i) {
+		for(int j = 0; j < 5;++j) {
+			sf::Color todo=sf::Color::White;
+			if(s[i][j] == 0) {
+				todo = sf::Color::Red;
+			} else if(s[i][j] == 1) {
+				todo = sf::Color::Blue;
+			} else if(s[i][j] == 2) {
+				todo = sf::Color::Black;
+			}
+			sf::Vector2f tempButtonSize(window.getSize().x/8, window.getSize().y/10);
+			sf::Vector2f tempButtonLoc(100+window.getSize().x/8+(j*50)+((window.getSize().x/8)*j),
+                    50+window.getSize().y/10+(40*i)+((window.getSize().y/10)*i));
+
+			Button tempBtn("",tempButtonLoc,tempButtonSize, todo,
+				window.getSize().x/38,count);
+
+			sf::Vector2f theShift(tempButtonLoc.x, 
+				tempButtonLoc.y + 2*(window.getSize().y/100));
+			std::cout << theShift.x << " " << theShift.y << std::endl;
+			tempBtn.shiftTextInside(theShift, window);
+			// temp.push_back(tempBtn);
+			tempBtn.draw(window);
+			count++;
+		}
+	}
+}
+
 
 int SpyMasterBoardScreen::Run(sf::RenderWindow &app) {
 	sf::RenderWindow window(sf::VideoMode(1600, 900), "SpymasterBoard");
@@ -54,7 +89,7 @@ int SpyMasterBoardScreen::Run(sf::RenderWindow &app) {
 	//ButtonActions allBtnActions;
     //allBtnActions.update_keybind(0, &canCloseItAll);
 
-	//std::vector<std::vector<int>> s = makeTheBoard();
+	// std::vector<std::vector<int>> s = makeTheBoard();
 	// for(int i = 0; i < 5; ++i) {
 	// 	for(int j = 0; j < 5; ++j) {
 	// 		std::cout << s[i][j] << " ";

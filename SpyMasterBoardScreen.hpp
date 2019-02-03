@@ -20,6 +20,8 @@ public:
 	SpyMasterBoardScreen();
 	std::vector<std::vector<int>> makeTheBoard();
 	virtual int Run(sf::RenderWindow &app);
+
+	void drawOnBoard(sf::RenderWindow &app);
 	
 
 private:

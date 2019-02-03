@@ -26,13 +26,12 @@ void Button::draw(sf::RenderWindow &window) {
 	currentText.draw(window);
 }
 
-bool Button::checkClick (sf::RenderWindow &window, ButtonActions &actions) {
+bool Button::checkClick (sf::RenderWindow &window) {
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		sf::Vector2i mousePos= sf::Mouse::getPosition(window);
 		sf::Vector2f currMousePosF(mousePos.x,mousePos.y);
 		if(buttonShape.getGlobalBounds().contains(currMousePosF)) {
-			actions.key_pressed(buttonId, window);//Do associated action with button
 			return true;
 		}
 	}

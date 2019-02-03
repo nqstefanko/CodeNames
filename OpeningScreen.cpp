@@ -29,8 +29,8 @@ int OpeningScreen::Run(sf::RenderWindow &app) {
 	Button LocalPlay("Local", sf::Vector2f(app.getSize().x/2.5, app.getSize().y/2), 
 		sf::Vector2f(app.getSize().x/6, app.getSize().y/10), sf::Color::Blue, app.getSize().x/18,1);
 
-	//Button MultiPlay("Multi", sf::Vector2f(app.getSize().x/2.5, app.getSize().y/2+app.getSize().y/10+50), 
-		//sf::Vector2f(app.getSize().x/6, app.getSize().y/10), sf::Color::Blue, app.getSize().x/18,0);
+	Button MultiPlay("Multi", sf::Vector2f(app.getSize().x/2.5, app.getSize().y/2+app.getSize().y/10+50), 
+		sf::Vector2f(app.getSize().x/6, app.getSize().y/10), sf::Color::Blue, app.getSize().x/18,0);
 
 	Text title("Codenames", sf::Vector2f(app.getSize().x/5, app.getSize().y/13), sf::Color::White,
 	 app.getSize().x/10,"fonts/Xpressive Regular.ttf");
@@ -40,7 +40,7 @@ int OpeningScreen::Run(sf::RenderWindow &app) {
 
 	QuitButton.draw(app);
 	LocalPlay.draw(app);
-	//MultiPlay.draw(app);
+	MultiPlay.draw(app);
 	title.draw(app);
 	menu.draw(app);
 
@@ -48,9 +48,12 @@ int OpeningScreen::Run(sf::RenderWindow &app) {
 	while(running) {
 		while(app.pollEvent(event)) {
 
-			QuitButton.checkClick(app, allBtnActions);
+			if(QuitButton.checkClick(app)) {
+				allBtnActions.key_pressed(QuitButton.buttonId, app);//Do associated action with button
+			}
 
-			if(LocalPlay.checkClick(app, allBtnActions)) {
+			if(LocalPlay.checkClick(app)) {
+				allBtnActions.key_pressed(LocalPlay.buttonId, app);//Do associated action with button
 				return 1;
 				break;
 			}
