@@ -1,10 +1,18 @@
 #include "PlayBoardScreen.hpp"
 PlayBoardScreen::PlayBoardScreen(){}
 
-// void closeItAllNow(sf::RenderWindow &app) {
-// 	app.close();
-// 	exit(0);
-// }
+void closeItAllNow(sf::RenderWindow &app) {
+	app.close();
+	exit(0);
+}
+
+void openSpyMasterBoard(sf::RenderWindow &app) {
+	SpyMasterBoardScreen smbs;
+	smbs.Run(app);
+}
+
+
+
 
 int PlayBoardScreen::Run(sf::RenderWindow &app) {
 	std::vector<std::vector<Button>> allCodeNames;
@@ -14,9 +22,9 @@ int PlayBoardScreen::Run(sf::RenderWindow &app) {
 	bool running = true;
 	app.clear(sf::Color::Black);
 	std::vector<std::string> currentWords = codeDict.generateWords(25);
-	for(int i =0;i< 25;i++) {
-		std::cout << currentWords[i] << std::endl;
-	}
+	// for(int i =0;i< 25;i++) {
+	// 	std::cout << currentWords[i] << std::endl;
+	// }
 	for(int i = 0; i < 5;++i) {
 		std::vector<Button> temp;
 		for(int j = 0; j < 5;++j) {
@@ -39,17 +47,25 @@ int PlayBoardScreen::Run(sf::RenderWindow &app) {
 
 	Button QuitButton("Quit", sf::Vector2f(0, 0), sf::Vector2f(app.getSize().x/12, app.getSize().y/16),
 	 sf::Color::Red, app.getSize().x/30,0);
+	
+	Button SpymasterButton("Spymaster Board", sf::Vector2f(app.getSize().x/3, 0), sf::Vector2f(app.getSize().x/3.5, app.getSize().y/15),
+	 sf::Color::Blue, app.getSize().x/40,1);
 
 	QuitButton.draw(app);
+	SpymasterButton.draw(app);
+
 
 	ButtonActions allBtnActions;
-    allBtnActions.update_keybind(0, &Utils::closeItAll);
+    allBtnActions.update_keybind(0, &closeItAllNow);
+    allBtnActions.update_keybind(1, &openSpyMasterBoard);
 
 
 	while(running) {
 		while(app.pollEvent(event)) {
 
 			QuitButton.checkClick(app, allBtnActions);
+			SpymasterButton.checkClick(app, allBtnActions);
+
 			if(event.type == sf::Event::Closed) { //If Wind Closed
 				std::cout << "Closing Opening Screen" << std::endl;
 				return -1;

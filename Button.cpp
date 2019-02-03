@@ -16,7 +16,6 @@ Button::Button(std::string displayText, sf::Vector2f location, sf::Vector2f butt
 
 void Button::shiftTextInside(sf::Vector2f &shift, sf::RenderWindow &window) {
 	currentText.setPosition(shift);
-	std::cout << "drawing?" << std::endl;
 	currentText.draw(window);
 }
 

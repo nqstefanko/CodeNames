@@ -8,6 +8,7 @@
 //Actual Screens
 #include "OpeningScreen.hpp"
 #include "PlayBoardScreen.hpp"
+#include "SpyMasterBoardScreen.hpp"
 
 
 #endif

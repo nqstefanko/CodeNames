@@ -1,5 +1,5 @@
-#ifndef PLAY_BOARD_SCREEN
-#define PLAY_BOARD_SCREEN
+#ifndef SPY_SCREEN
+#define SPY_SCREEN
 
 
 #include <SFML/Graphics.hpp>
@@ -8,21 +8,19 @@
 #include <vector>
 
 #include "CScreen.hpp"
-#include "OpeningScreen.hpp"
-#include "SpyMasterBoardScreen.hpp"
-
 #include "Button.hpp"
 #include "ButtonActions.hpp"
 #include "Text.hpp"
-#include "WordGenerator.hpp"
 
 
 
-class PlayBoardScreen: public CScreen
+class SpyMasterBoardScreen: public CScreen
 {
 public:
+	SpyMasterBoardScreen();
+	std::vector<std::vector<int>> makeTheBoard();
 	virtual int Run(sf::RenderWindow &app);
-	PlayBoardScreen();
+	
 
 private:
 

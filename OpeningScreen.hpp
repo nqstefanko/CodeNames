@@ -19,6 +19,7 @@ class OpeningScreen: public CScreen
 public:
 	virtual int Run(sf::RenderWindow &app);
 	OpeningScreen();
+	~OpeningScreen();
 
 private:
 
