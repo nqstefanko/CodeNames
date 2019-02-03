@@ -2,11 +2,6 @@
 
 OpeningScreen::OpeningScreen(){}
 
-void closeItAll(sf::RenderWindow &app) {
-	app.close();
-	exit(0);
-}
-
 void switchMeIp(sf::RenderWindow &app) {
 	std::cout << "switching screens" << std::endl;
 }
@@ -14,7 +9,7 @@ void switchMeIp(sf::RenderWindow &app) {
 int OpeningScreen::Run(sf::RenderWindow &app) {
 
 	ButtonActions allBtnActions;
-    allBtnActions.update_keybind(0, &closeItAll);
+    allBtnActions.update_keybind(0, &(Utils::closeItAll));
     allBtnActions.update_keybind(1, &switchMeIp);
 
 

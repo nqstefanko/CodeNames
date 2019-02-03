@@ -3,6 +3,7 @@
 
 //Basic Screen
 #include "CScreen.hpp"
+#include "Utils.cpp"
 
 //Actual Screens
 #include "OpeningScreen.hpp"

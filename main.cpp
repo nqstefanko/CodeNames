@@ -4,10 +4,12 @@
 #include <iostream>
 #include <vector>
 
+#include "Utils.hpp"
 #include "AllScreens.hpp"
 #include "Button.hpp"
 #include "ButtonActions.hpp"
 #include "Text.hpp"
+
 
 int main(int argc, char ** argv) {
 	std::vector<CScreen*> screenContainer;

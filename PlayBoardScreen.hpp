@@ -9,7 +9,6 @@
 
 #include "CScreen.hpp"
 #include "OpeningScreen.hpp"
-
 #include "Button.hpp"
 #include "ButtonActions.hpp"
 #include "Text.hpp"

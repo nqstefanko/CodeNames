@@ -1,10 +1,10 @@
 #include "PlayBoardScreen.hpp"
 PlayBoardScreen::PlayBoardScreen(){}
 
-void closeItAllNow(sf::RenderWindow &app) {
-	app.close();
-	exit(0);
-}
+// void closeItAllNow(sf::RenderWindow &app) {
+// 	app.close();
+// 	exit(0);
+// }
 
 int PlayBoardScreen::Run(sf::RenderWindow &app) {
 	std::vector<std::vector<Button>> allCodeNames;
@@ -43,7 +43,7 @@ int PlayBoardScreen::Run(sf::RenderWindow &app) {
 	QuitButton.draw(app);
 
 	ButtonActions allBtnActions;
-    allBtnActions.update_keybind(0, &closeItAllNow);
+    allBtnActions.update_keybind(0, &Utils::closeItAll);
 
 
 	while(running) {
