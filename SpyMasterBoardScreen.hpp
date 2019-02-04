@@ -7,6 +7,7 @@
 #include <functional>
 #include <vector>
 #include <random>
+#include <numeric>
 
 #include "CScreen.hpp"
 #include "Button.hpp"

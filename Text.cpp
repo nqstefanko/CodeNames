@@ -23,6 +23,7 @@ Text::Text(std::string displayText, sf::Vector2f location, const sf::Color & col
 	currentText.setCharacterSize(fontSize); // in pixels, not points!
 	currentText.setColor(color); // in pixels, not points!
 
+	//currentText.setFillColor(color); // in pixels, not points!
 	//currentText.setStyle(sf::Text::Bold);// | sf::Text::Underlined);
 }
 

@@ -23,7 +23,6 @@ void spawn()
 
     while (w.isOpen())
     {
-    	std::cout << "fa";
         while (w.pollEvent(event))
             if (event.type == sf::Event::Closed) {
             	w.close();
