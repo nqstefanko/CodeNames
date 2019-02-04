@@ -671,3 +671,9 @@ Zero
 Zipper
 Zone
 Zoo
+Tokyo
+Cairo
+London
+Hong Kong
+New York
+Los Angeles
