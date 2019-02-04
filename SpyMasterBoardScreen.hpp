@@ -6,6 +6,7 @@
 #include <iostream>
 #include <functional>
 #include <vector>
+#include <random>
 
 #include "CScreen.hpp"
 #include "Button.hpp"
