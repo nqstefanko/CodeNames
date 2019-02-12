@@ -10,10 +10,17 @@
 class Text
 {
 public:
-	Text();
-	Text(std::string displayText, sf::Vector2f location, const sf::Color & color, int fontSize, std::string fontFile);
-	void draw(sf::RenderWindow &window);
-	void setPosition(const sf::Vector2f& shift);
+	//Text();
+	Text(std::string displayText="", sf::Vector2f location=sf::Vector2f(0,0), const sf::Color & color=sf::Color::White, 
+		int fontSize=36, std::string fontFile="fonts/Xpressive Regular.ttf");
+	void setTextItems(std::string displayText="", sf::Vector2f location=sf::Vector2f(0,0), const sf::Color & color=sf::Color::White, 
+		int fontSize=36, std::string fontFile="fonts/Xpressive Regular.ttf");
+	void draw(sf::RenderWindow & window);
+	void setPosition(const sf::Vector2f & shift);
+	const sf::Vector2f & getPosition();
+	const sf::FloatRect getGlobalBounds();
+	void setString(std::string s);
+
 
 
 private:

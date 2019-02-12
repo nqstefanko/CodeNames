@@ -1,17 +1,24 @@
 #include "Text.hpp"
 
-Text::Text(){
-	if (!Text::font.loadFromFile("fonts/Xpressive Regular.ttf"))
-	{
-	    std::cout << "Unable to Load Font" << std::endl;
-	}
+// Text::Text(){
+// 	if (!Text::font.loadFromFile("fonts/Xpressive Regular.ttf"))
+// 	{
+// 	    std::cout << "Unable to Load Font" << std::endl;
+// 	}
 
-	Text::currentText.setFont(font); // font is a sf::Font
-	Text::currentText.setString("");
-}
+// 	currentText.setFont(font); // font is a sf::Font
+// 	currentText.setString("");
+// 	currentText.setFillColor(sf::Color::White); // in pixels, not points!
+
+// }
 
 Text::Text(std::string displayText, sf::Vector2f location, const sf::Color & color, int fontSize, std::string fontFile)
 {
+	setTextItems(displayText, location, color, fontSize, fontFile);
+}
+
+void Text::setTextItems(std::string displayText, sf::Vector2f location, const sf::Color & color,
+	int fontSize, std::string fontFile) {
 	if (!font.loadFromFile(fontFile))
 	{
 	    std::cout << "Unable to Load Font" << std::endl;
@@ -20,16 +27,25 @@ Text::Text(std::string displayText, sf::Vector2f location, const sf::Color & col
 	currentText.setFont(font); // font is a sf::Font
 	currentText.setString(displayText);
 	currentText.setPosition(location.x,location.y);
-	currentText.setCharacterSize(fontSize); // in pixels, not points!
-	currentText.setColor(color); // in pixels, not points!
-
-	//currentText.setFillColor(color); // in pixels, not points!
-	//currentText.setStyle(sf::Text::Bold);// | sf::Text::Underlined);
+	currentText.setCharacterSize(fontSize); // in pixels, not points!	
 }
 
-void Text::setPosition(const sf::Vector2f &shift) {
+
+void Text::setPosition(const sf::Vector2f & shift) {
 	currentText.setPosition(shift);
 }
-void Text::draw(sf::RenderWindow &window) {
+
+const sf::Vector2f & Text::getPosition() {
+	return currentText.getPosition();
+}
+const sf::FloatRect Text::getGlobalBounds() {
+	return currentText.getGlobalBounds();
+}
+
+void Text::setString(std::string s) {
+	currentText.setString(s);
+}
+
+void Text::draw(sf::RenderWindow & window) {
 	window.draw(currentText);
 }

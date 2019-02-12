@@ -1,38 +1,40 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
+#include <SFML/System.hpp>
 
 #include <iostream>
 #include <vector>
+#include <stdlib.h>    
 
-#include "Utils.hpp"
-#include "AllScreens.hpp"
-#include "Button.hpp"
-#include "ButtonActions.hpp"
-#include "Text.hpp"
-
+#include "Util.hpp"
+#include "InputScreen.hpp"
 
 int main(int argc, char ** argv) {
 	std::vector<CScreen*> screenContainer;
 	int currentScreen = 0;
 
-	sf::RenderWindow App(sf::VideoMode(1600, 900, 32), "SFML Window");
-	App.setFramerateLimit(70);
-	App.clear(sf::Color::Black);
-	App.display(); //Clears Screen Initially Before Opening menu
+
+	sf::TcpSocket socket;
+	
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "SFML Window");
+	window.setFramerateLimit(FPS);
+	window.clear(sf::Color::Black);
+	window.display(); //Clears Screen Initially Before Opening menu
+	
+	std::string username = "";
 
 
-	
-	OpeningScreen menu;
-	screenContainer.push_back(&menu);
-	
-	PlayBoardScreen gameboard;
-	screenContainer.push_back(&gameboard);
+	InputScreen startScreen(username, std::string("Enter your name (Max 15 Characters)"), 15);
+	screenContainer.push_back(&startScreen);
 	
 	while (currentScreen >= 0)
 	{
-		currentScreen = screenContainer[currentScreen]->Run(App);
+		currentScreen = screenContainer[currentScreen]->run(window);
 	}
 
-	return EXIT_SUCCESS;
+	printDebug("Closing Program");
+
+	return 0;
 	
 }
