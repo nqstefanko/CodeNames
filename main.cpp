@@ -9,6 +9,8 @@
 
 #include "Util.hpp"
 #include "InputScreen.hpp"
+#include "ChoosingScreen.hpp"
+
 
 int main(int argc, char ** argv) {
 	std::vector<CScreen*> screenContainer;
@@ -24,9 +26,15 @@ int main(int argc, char ** argv) {
 	
 	std::string username = "";
 
+	bool serverUser = false;
+
 
 	InputScreen startScreen(username, std::string("Enter your name (Max 15 Characters)"), 15);
 	screenContainer.push_back(&startScreen);
+
+
+	ChoosingScreen chooseScreen(serverUser);
+	screenContainer.push_back(&chooseScreen);
 	
 	while (currentScreen >= 0)
 	{

@@ -24,6 +24,8 @@ int InputScreen::run(sf::RenderWindow & window) {
 			} else if (e.type == sf::Event::TextEntered) {
 				if(e.text.unicode == 10 || e.text.unicode == 12 || e.text.unicode == 13) {//Ret
 					printDebug("Entered Name");
+					*inputStr = input;
+					return 1;
 				} else if (e.text.unicode == 8) { //Back Space
 					input = input.substr(0, input.size()-1);
 					inputText.setString(input);
