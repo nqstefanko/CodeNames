@@ -11,7 +11,8 @@
 #include "InputScreen.hpp"
 #include "ChoosingScreen.hpp"
 #include "ConnectionScreen.hpp"
-
+#include "GameScreen.hpp"
+#include "Board.hpp"
 
 int main(int argc, char ** argv) {
 	std::vector<CScreen*> screenContainer;
@@ -27,20 +28,24 @@ int main(int argc, char ** argv) {
 	std::string ip = "";
 	bool serverUser = false;
 
+	Board gameboard;
+	gameboard.generateBoard();
+	// InputScreen startScreen(username,ip, std::string("Enter your name (Max 20 Characters)"), 20);
+	// screenContainer.push_back(&startScreen);
 
-	InputScreen startScreen(username,ip, std::string("Enter your name (Max 20 Characters)"), 20);
-	screenContainer.push_back(&startScreen);
+	// ChoosingScreen chooseScreen(serverUser);
+	// screenContainer.push_back(&chooseScreen);
 
-	ChoosingScreen chooseScreen(serverUser);
-	screenContainer.push_back(&chooseScreen);
+	// ConnectionScreen connScreen(serverUser, socket, username);
+	// screenContainer.push_back(&connScreen);
 
-	ConnectionScreen connScreen(serverUser, socket, username);
-	screenContainer.push_back(&connScreen);
+	// GameScreen game;
+	// screenContainer.push_back(&game);
 	
-	while (currentScreen >= 0)
-	{
-		currentScreen = screenContainer[currentScreen]->run(window);
-	}
+	// while (currentScreen >= 0)
+	// {
+	// 	currentScreen = screenContainer[currentScreen]->run(window);
+	// }
 
 	printDebug("Closing Program");
 

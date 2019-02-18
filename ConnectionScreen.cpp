@@ -83,7 +83,7 @@ int ConnectionScreen::run(sf::RenderWindow & window) {
 				return -1;
 			} 
 			if(connected) {
-				return -1;
+				return 3;
 			}
 		}
 	}
