@@ -1,7 +1,7 @@
 #include "Util.hpp"
 
-extern const int WINDOW_WIDTH = 1600;
-extern const int WINDOW_HEIGHT = 900;
+extern const int WINDOW_WIDTH = 800;
+extern const int WINDOW_HEIGHT = 600;
 extern const int FPS = 60;
 extern const bool  DEBUG = true;
 extern const int CLIENT_USER = 0;

@@ -1,7 +1,7 @@
 #include "ChoosingScreen.hpp"
 
 ChoosingScreen::ChoosingScreen(bool & userType) {
-	serverOrClient = &userType;
+	isServer = &userType;
 }
 
 int ChoosingScreen::run(sf::RenderWindow & window) {
@@ -23,10 +23,15 @@ int ChoosingScreen::run(sf::RenderWindow & window) {
 		sf::Event e;
 		for(int i = 0; i < allButtons.size(); ++i) {
 			if(allButtons[i].checkClick(window)) {
-			*serverOrClient = i;
-			printDebug("Clicked Button " + std::to_string(i) + "\n");
-			return -1;
-			return 2;
+				printDebug("Clicked Button " + std::to_string(i));
+				*isServer = i;
+				if(*isServer) {
+					printDebug("Clicked Server");
+					return 2;
+				} else {
+					printDebug("Clicked Client");
+					return 0;
+				}
 			}		
 		}
 		

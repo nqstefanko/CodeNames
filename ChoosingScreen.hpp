@@ -1,6 +1,7 @@
 #ifndef CHOOSINGSCREEN_H
 #define CHOOSINGSCREEN_H
 
+
 #include <string>
 #include <iostream>
 //#include <vector>
@@ -12,11 +13,11 @@
 
 class ChoosingScreen : public CScreen {
 private:
-	bool * serverOrClient; 
+	bool * isServer; 
 	void updateScreen(sf::RenderWindow & window, std::vector<Button>& allButtons);
 
 public:
-    ChoosingScreen();
+    ChoosingScreen(bool & userType);
     virtual int run(sf::RenderWindow & window);
 };
 

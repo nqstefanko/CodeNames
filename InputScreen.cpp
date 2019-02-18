@@ -1,7 +1,8 @@
 #include "InputScreen.hpp"
 
-InputScreen::InputScreen(std::string & inputString, std::string queryMessage, int maxCharacter)
+InputScreen::InputScreen(std::string & inputString, std::string & ip, std::string queryMessage, int maxCharacter)
 {
+	ipAddress = &ip;
 	inputStr = &inputString;
 	queryMsg = queryMessage;
 	maxChar = maxCharacter;
@@ -9,6 +10,9 @@ InputScreen::InputScreen(std::string & inputString, std::string queryMessage, in
 	initTextComponents();
 }
 
+void InputScreen::setInputStr(std::string & newStr) {
+	inputStr = &newStr;
+}
 
 int InputScreen::run(sf::RenderWindow & window) {
 	std::string input = "";
@@ -23,9 +27,19 @@ int InputScreen::run(sf::RenderWindow & window) {
 				return -1;
 			} else if (e.type == sf::Event::TextEntered) {
 				if(e.text.unicode == 10 || e.text.unicode == 12 || e.text.unicode == 13) {//Ret
-					printDebug("Entered Name");
+					printDebug("Entered " + input);
+					*ipAddress = input;
+					if(queryMsg == "Enter IP Address Please") {
+						printDebug(*ipAddress);
+						return 2;//-1;
+					}
+					queryMsg = "Enter IP Address Please";
+					queryText.setString("Enter IP Address Please");
 					*inputStr = input;
+					input = "";
+					inputText.setString("");
 					return 1;
+
 				} else if (e.text.unicode == 8) { //Back Space
 					input = input.substr(0, input.size()-1);
 					inputText.setString(input);
@@ -66,7 +80,7 @@ void InputScreen::updateCursor() {
 bool InputScreen::validateInput(int ascii_id) {
     if (ascii_id >= 'A' && ascii_id <= 'Z') return true;
     if (ascii_id >= '0' && ascii_id <= '9') return true;
-    return ascii_id >= 'a' && ascii_id <= 'z';
+    return (ascii_id >= 'a' && ascii_id <= 'z') || (ascii_id <= '.');
 }
 
 void InputScreen::initInputComponents() {
