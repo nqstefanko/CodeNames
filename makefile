@@ -3,12 +3,12 @@
 # 	clang++-7 -std=c++11 main.cpp Button.cpp ButtonActions.cpp Text.cpp OpeningScreen.cpp -o Codenames -lsfml-graphics -lsfml-window -lsfml-system -pthread
 
 Compile: main.cpp Util.cpp Text.cpp InputScreen.cpp
-	clang++-7 -c -std=c++11 main.cpp Util.cpp Text.cpp Button.cpp \
+	clang++-7 -c -std=c++11 main.cpp Util.cpp Text.cpp Button.cpp InputBox.cpp \
 	ChoosingScreen.cpp InputScreen.cpp ConnectionScreen.cpp WordGenerator.cpp \
 	GameScreen.cpp Board.cpp -I /home/nick/SFML-2.5.1/include
 
 Link: main.cpp Text.cpp InputScreen.cpp
-	clang++-7 main.o Util.o Text.o Button.o ChoosingScreen.o InputScreen.o \
+	clang++-7 main.o Util.o Text.o Button.o InputBox.o ChoosingScreen.o InputScreen.o \
 	ConnectionScreen.o GameScreen.o WordGenerator.o Board.o -o Codenames -L /home/nick/SFML-2.5.1/lib \
 	 -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
 

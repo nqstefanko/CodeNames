@@ -23,15 +23,15 @@ void ConnectionScreen::makeConnection() {
 			return;
 		}
 
-		if(listener.accept(acceptingSocket) != sf::Socket::Done ) {
+		if(listener.accept(*clientSocket) != sf::Socket::Done ) {
 			printDebug("TITS Boss we got an Acceptance error!");
 			return;
 		}
 		printDebug("Connected from SERVER");
 		connected = true;
 		packet << "Server: Welcome " + *username;
-		acceptingSocket.send(packet);
-		acceptingSocket.receive(packet);
+		clientSocket->send(packet);
+		clientSocket->receive(packet);
 		if (packet >> s)
 		{
 		    std::cout << s << std::endl;

@@ -11,6 +11,8 @@ Button::Button(std::string displayText, sf::Vector2f location,
     buttonShape.setPosition(location.x, location.y);
     buttonShape.setSize(buttonSize);
     buttonShape.setFillColor(color);
+    buttonShape.setOutlineThickness(-1);
+    buttonShape.setOutlineColor(sf::Color::White);
     currentState = false;
 
 }
@@ -20,6 +22,10 @@ void Button::shiftTextInside(sf::Vector2f & shift, sf::RenderWindow & window) {
 	currentText.draw(window);
 }
 
+void Button::setColor(const sf::Color & color) {
+	buttonShape.setFillColor(color);
+}
+
 
 void Button::draw(sf::RenderWindow & window) {
 	window.draw(buttonShape);
@@ -27,7 +33,6 @@ void Button::draw(sf::RenderWindow & window) {
 }
 
 bool Button::checkClick (sf::RenderWindow & window) {
-
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 		sf::Vector2f currMousePosF(mousePos.x, mousePos.y);

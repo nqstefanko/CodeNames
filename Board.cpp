@@ -1,9 +1,12 @@
 #include "Board.hpp"
 
-Board::Board(){}
+Board::Board()
+{
+	words = generator.generateWords();
+}
 
-std::vector<std::vector<int>> generate5x5Board(
-	std::map<int, std::vector<int>> &teamBreakdown) {
+std::vector<std::vector<int>> Board::generate5x5Board() {
+
 	std::vector<int> allNumbers(25); // 25
 	std::vector<int> spiesAndAssassin(25); // 25
 	std::vector<std::vector<int>> toRet;
@@ -40,14 +43,9 @@ std::vector<std::vector<int>> generate5x5Board(
 	return toRet;
 }
 
-	// int assassinToNeutral = teamBreakdown[1][0];
-	// int assassinToGreen = teamBreakdown[1][1];
-	// int assassinToAssassin = teamBreakdown[1][2];
-	// int greenToAssassin = teamBreakdown[0][0];
-	// int neurtalToAssassin = teamBreakdown[-1][0];
 
-std::vector<std::vector<int>> generateOpposingBoard(
-	std::map<int, std::vector<int>> &teamBreakdown) {
+
+std::vector<std::vector<int>> Board::generateOpposingBoard() {
 
 	std::map<int, std::vector<int>> newTeamBreakdown;
 	std::vector<int> newVec(teamBreakdown[0].begin(),
@@ -61,8 +59,6 @@ std::vector<std::vector<int>> generateOpposingBoard(
 	for (int i = 4; i < teamBreakdown[0].size();i++) {
 		newTeamBreakdown[-1].push_back(teamBreakdown[0][i]);
 	}
-
-
 
 	std::vector<int> allNumbers(25); // 25
 	std::vector<int> toConvert(25); // 25
@@ -118,22 +114,106 @@ std::vector<std::vector<int>> generateOpposingBoard(
 	return toRet;
 }
 
-void printBoard(std::vector<std::vector<int>> board) {
+//3 and 1 greens, 2 assassins, and one neutral 
+void Board::generateBoards() {
+	
+	boardOneStructure = generate5x5Board();
+	boardTwoStructure = generateOpposingBoard();
+}
+
+void Board::drawBoard(sf::RenderWindow & window) {
+	int count = 0;
 	for(int i = 0; i < 5; ++i) {
-		std::cout << "[";
+		std::vector<Button> temp;
 		for(int j = 0; j < 5; ++j) {
-			std::cout << board[i][j] << ", ";
+			sf::Vector2f tempButtonSize(window.getSize().x/8, window.getSize().y/12);
+			sf::Vector2f tempButtonLoc(window.getSize().x/32 + (j * 30) + 
+				((window.getSize().x/8) * j), window.getSize().y/30 + window.getSize().y/3 + (20 * i) + 
+				((window.getSize().y/10) * i));
+
+			Button tempBtn(words[count], tempButtonLoc, tempButtonSize,
+			sf::Color::Black, window.getSize().x/38, count);
+
+			sf::Vector2f theShift(tempButtonLoc.x, 
+				tempButtonLoc.y + 2 * (window.getSize().y/100));
+
+			tempBtn.shiftTextInside(theShift, window);
+			temp.push_back(tempBtn);
+			tempBtn.draw(window);
+			count++;
 		}
-		std::cout << "]"<<std::endl;
+		boardOneColorsUI.push_back(temp);
 	}
 }
 
-//3 and 1 greens, 2 assassins, and one neutral 
-void Board::generateBoards() {
-	std::map<int, std::vector<int>> teamBreakdown;
-	std::vector<std::vector<int>> boardOneStructure = generate5x5Board(teamBreakdown);
-	std::vector<std::vector<int>> boardOneStructure = generateOpposingBoard(teamBreakdown);
+void Board::drawMiniColorBoard(sf::RenderWindow & window, int boardNumber) {
+	int count = 0;
+	for(int i = 0; i < 5; ++i) {
+		std::vector<Button> temp;
+		for(int j = 0; j < 5; ++j) {
+			sf::Vector2f tempButtonSize(window.getSize().x/32, window.getSize().y/36);
+			sf::Vector2f tempButtonLoc(window.getSize().x/1.5 + (j * 15) + 
+				((window.getSize().x/32) * j), window.getSize().y/30 + window.getSize().y/30 + (10 * i) + 
+				((window.getSize().y/30) * i));
+			std::vector<std::vector<int>> * boardPtr;
+			Button tempBtn("", tempButtonLoc, tempButtonSize,
+				sf::Color::Black, window.getSize().x/38, count);
+
+			if(boardNumber == 1) {
+				boardPtr = &boardOneStructure;
+			} else {
+				boardPtr = &boardTwoStructure;
+			}
+
+			//printDebug("Num: " + std::to_string((*boardPtr)[i][j]));
+			switch((*boardPtr)[i][j]) {
+				case 0:
+					tempBtn.setColor(sf::Color::Green);
+					break;
+				case 1:
+					tempBtn.setColor(sf::Color::Black);
+					break;
+				default:
+					tempBtn.setColor(sf::Color::White);
+					break;
+			}
+
+			sf::Vector2f theShift(tempButtonLoc.x, 
+				tempButtonLoc.y + 2 * (window.getSize().y/100));
+
+			temp.push_back(tempBtn);
+			tempBtn.draw(window);
+			count++;
+		}
+	}
 }
+
+
+void Board::setBoard(std::string allBoardValues) {
+	for(int count = 0; count < allBoardValues.length();++count) {
+		int i = count/5;
+		int j = count%5;
+		int num = allBoardValues[count] -'0';
+		boardOneStructure[i][j] = num;
+	}
+}
+
+void Board::setWords(std::string newWord, int num) {
+	words[num] = newWord;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // #include "SpyMasterBoardScreen.hpp"
 
