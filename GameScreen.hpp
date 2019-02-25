@@ -1,8 +1,11 @@
 #ifndef GAMESCREEN_H
 #define GAMESCREEN_H
 
+#include <SFML/Graphics.hpp>
+
 #include <string>
 #include <iostream>
+#include <set>
 //#include <vector>
 
 #include "CScreen.hpp"
@@ -17,13 +20,23 @@ private:
 	void updateScreen(sf::RenderWindow & window);
 	
 public:
+
+	std::string *username;
+	bool opponenetsMove;
 	bool * isServer; 
+	bool setUpDone;
 	Board * boardPtr;
 	sf::TcpSocket * socket;
 	InputBox inputItem;
+
 	Text turnsLeft;
 	Text agentsLeft;
-    GameScreen(Board & board,std::string & inputString, bool & userType);
+	Text agentTurn;
+	Text agentName;
+
+	void setUpBoardsMyBoi();
+    GameScreen(Board & newBoard,std::string & inputString, bool & userType,
+	std::string user, sf::TcpSocket & sock);
     virtual int run(sf::RenderWindow & window);
 };
 

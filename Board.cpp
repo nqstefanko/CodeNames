@@ -3,6 +3,8 @@
 Board::Board()
 {
 	words = generator.generateWords();
+	std::random_shuffle ( words.begin(), words.end() );
+
 }
 
 std::vector<std::vector<int>> Board::generate5x5Board() {
@@ -29,8 +31,8 @@ std::vector<std::vector<int>> Board::generate5x5Board() {
 	}
 
 	for(int i = 0; i < allNumbers.size();++i) {
-		theTeamsMan[allNumbers[i]] = -1;//Make neutral
-		teamBreakdown[-1].push_back(allNumbers[i]);
+		theTeamsMan[allNumbers[i]] = 2;//Make neutral
+		teamBreakdown[2].push_back(allNumbers[i]);
 	}
 
 	for(int i = 0; i < 5; ++i) {
@@ -53,11 +55,11 @@ std::vector<std::vector<int>> Board::generateOpposingBoard() {
 	newTeamBreakdown[0] = newVec;//Shared Green Cards 3
 	newTeamBreakdown[1].push_back(teamBreakdown[1][0]);//AssassinToAssassin
 	newTeamBreakdown[0].push_back(teamBreakdown[1][1]);//AssassinToGren
-	newTeamBreakdown[-1].push_back(teamBreakdown[1][2]);//AssassinToNeurta;
+	newTeamBreakdown[2].push_back(teamBreakdown[1][2]);//AssassinToNeurta;
 	newTeamBreakdown[1].push_back(teamBreakdown[0][3]);//GreeenToAssassin
-	newTeamBreakdown[1].push_back(teamBreakdown[-1][0]);//neurtalToAssassin
+	newTeamBreakdown[1].push_back(teamBreakdown[2][0]);//neurtalToAssassin
 	for (int i = 4; i < teamBreakdown[0].size();i++) {
-		newTeamBreakdown[-1].push_back(teamBreakdown[0][i]);
+		newTeamBreakdown[2].push_back(teamBreakdown[0][i]);
 	}
 
 	std::vector<int> allNumbers(25); // 25
@@ -65,7 +67,7 @@ std::vector<std::vector<int>> Board::generateOpposingBoard() {
 	std::vector<std::vector<int>> toRet;
 
 	std::iota (std::begin(allNumbers), std::end(allNumbers), 0);//Fill with 0-24 
-	for(int i = -1; i < 2; i++) {
+	for(int i = 0; i < 3; i++) {
 		for (auto num: newTeamBreakdown[i]) {
 			allNumbers.erase(std::remove(std::begin(allNumbers), std::end(allNumbers), num),
           		std::end(allNumbers));
@@ -89,12 +91,12 @@ std::vector<std::vector<int>> Board::generateOpposingBoard() {
 	}
 
 	for(int i = 0; i < allNumbers.size();++i) {
-		newTeamBreakdown[-1].push_back(allNumbers[i]);
+		newTeamBreakdown[2].push_back(allNumbers[i]);
 	}
 
 
 	std::iota (std::begin(allNumbers), std::end(allNumbers), 0);//Fill with 0-24 
-	for(int i = -1; i < 2; i++) {
+	for(int i = 0; i < 3; i++) {
 		for (auto num: newTeamBreakdown[i]) {
 			toConvert[num] = i;
 		}
@@ -119,6 +121,8 @@ void Board::generateBoards() {
 	
 	boardOneStructure = generate5x5Board();
 	boardTwoStructure = generateOpposingBoard();
+	printBoard(boardOneStructure);
+	printBoard(boardTwoStructure);
 }
 
 void Board::drawBoard(sf::RenderWindow & window) {
@@ -197,6 +201,21 @@ void Board::setBoard(std::string allBoardValues) {
 		boardOneStructure[i][j] = num;
 	}
 }
+
+std::string Board::getBoardValues(int num) {
+	std::string toRet;
+	for(int i = 0; i < 5; ++i) {
+		for(int j = 0; j < 5; ++j) {
+			if(num == 1) {
+				toRet+=std::to_string(boardOneStructure[i][j]);
+			} else {
+				toRet+=std::to_string(boardTwoStructure[i][j]);
+			}
+		}
+	}
+	return toRet;
+}
+
 
 void Board::setWords(std::string newWord, int num) {
 	words[num] = newWord;

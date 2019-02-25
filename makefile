@@ -21,6 +21,7 @@ Codenames:
 
 Export:
 	export LD_LIBRARY_PATH=/home/nick/SFML-2.5.1/lib
+
 PackageManCodenames:
 	clang++ main.cpp -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
 

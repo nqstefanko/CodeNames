@@ -17,11 +17,10 @@ public:
 	void drawBoard(sf::RenderWindow & window);
 	void drawMiniColorBoard(sf::RenderWindow & window, int boardNumber);
 	void showSpyBoard(sf::RenderWindow & window);
-
-private:
+	std::string getBoardValues(int num);
 	std::vector<std::string> words;
 	
-
+private:
 	std::map<int, std::vector<int>> teamBreakdown;
 	std::vector<std::vector<int>> boardOneStructure;
 	std::vector<std::vector<int>> boardTwoStructure;

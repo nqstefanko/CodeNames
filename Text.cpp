@@ -27,7 +27,8 @@ void Text::setTextItems(std::string displayText, sf::Vector2f location, const sf
 	currentText.setFont(font); // font is a sf::Font
 	currentText.setString(displayText);
 	currentText.setPosition(location.x,location.y);
-	currentText.setCharacterSize(fontSize); // in pixels, not points!	
+	currentText.setCharacterSize(fontSize); // in pixels, not points!
+	currentText.setFillColor(color);	
 }
 
 

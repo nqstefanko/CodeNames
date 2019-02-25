@@ -4,7 +4,7 @@ Button::Button(std::string displayText, sf::Vector2f location,
 	sf::Vector2f buttonSize, const sf::Color & color, int fontSize, int newBid): 
 	
 	currentText(displayText, sf::Vector2f(location.x + buttonSize.x / 6,
-		location.y - buttonSize.y / 10), sf::Color::Black, fontSize, 
+		location.y - buttonSize.y / 10), sf::Color::White, fontSize, 
 		"fonts/Xpressive Regular.ttf" )
 {
 	buttonId = newBid;

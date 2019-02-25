@@ -1,11 +1,17 @@
 #include "ConnectionScreen.hpp"
 
 ConnectionScreen::ConnectionScreen(bool & isThisTheServer, sf::TcpSocket & socket,
-	std::string & user){
+	std::string & user, std::string ip){
 	isServer = &isThisTheServer;
 	clientSocket = &socket;
 	username = &user;
 	connected = false;
+	if(ip == ""){
+		ipAddress="127.0.0.1";
+	} else {
+		ipAddress = ip;
+
+	}
 }
 
 void ConnectionScreen::updateScreen(sf::RenderWindow & window) {
@@ -19,12 +25,12 @@ void ConnectionScreen::makeConnection() {
 	if(*isServer) {//SERVER SIDE!!
 		printDebug("Listening...");
 		if(listener.listen(6969) != sf::Socket::Done) {
-			printDebug("Fuck Boss we got a Listening error!");
+			printDebug("Darn Boss we got a Listening error!");
 			return;
 		}
 
 		if(listener.accept(*clientSocket) != sf::Socket::Done ) {
-			printDebug("TITS Boss we got an Acceptance error!");
+			printDebug("Shoot Boss we got an Acceptance error!");
 			return;
 		}
 		printDebug("Connected from SERVER");
@@ -38,12 +44,12 @@ void ConnectionScreen::makeConnection() {
 		}
 		else
 		{
-		    printDebug("Cunt 1");
+		    printDebug("Packets Not Sent 1");
 		}
 
 	} else {//CLIENT SIDE
 		printDebug("Trying to Connect to Server!");
-		sf::Socket::Status status = clientSocket->connect("127.0.0.1", 6969);
+		sf::Socket::Status status = clientSocket->connect(ipAddress, 6969);
 		if (status != sf::Socket::Done)
 		{
 			printDebug("Status Error Client!");
@@ -65,7 +71,6 @@ void ConnectionScreen::makeConnection() {
 		    printDebug("Cunt 2");
 		}
 	}
-
 }
 
 int ConnectionScreen::run(sf::RenderWindow & window) {

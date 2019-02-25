@@ -25,7 +25,7 @@ private:
 	void updateScreen(sf::RenderWindow & window);
 
 public:
-    ConnectionScreen(bool & isThisTheServer, sf::TcpSocket & socket,std::string & user);
+    ConnectionScreen(bool & isThisTheServer, sf::TcpSocket & socket,std::string & user, std::string ip);
     virtual int run(sf::RenderWindow & window);
 };
 

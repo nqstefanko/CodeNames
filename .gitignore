@@ -1,0 +1,5 @@
+#ignore all logs
+*.o
+Codenames
+junk.txt
+zPractice.cpp
