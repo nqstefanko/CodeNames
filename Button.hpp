@@ -18,9 +18,11 @@ public:
 		const sf::Color & color, int fontSize, int newBid);
 	Button(const Button & b);
 	void setColor(const sf::Color & color);
+	void setText(std::string displayText);
+
 	bool checkClick (sf::RenderWindow & window);
 	void draw(sf::RenderWindow & window);
-	void shiftTextInside(sf::Vector2f & shift, sf::RenderWindow & window);
+	void shiftTextInside(sf::Vector2f & shift);//, sf::RenderWindow & window);
 
 private:
 	sf::RectangleShape buttonShape;

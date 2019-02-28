@@ -11,6 +11,8 @@ GameScreen::GameScreen(Board & newBoard,std::string & inputString, bool & userTy
 	 (userType) ? sf::Color::Red : sf::Color::Blue, 48, 
 		"fonts/Xpressive Regular.ttf" ),
 	currentClue("Current Clue: Waiting on Sender!", sf::Vector2f(WINDOW_WIDTH/40, WINDOW_HEIGHT/30), sf::Color::Green, 48, 
+		"fonts/Xpressive Regular.ttf" ),
+	guessText("Guesses:", sf::Vector2f(WINDOW_WIDTH/1.25, WINDOW_HEIGHT/1.25), sf::Color::White, 48, 
 		"fonts/Xpressive Regular.ttf" )
 	
 {
@@ -21,7 +23,7 @@ GameScreen::GameScreen(Board & newBoard,std::string & inputString, bool & userTy
 	socket = &sock;
 	setUpDone= false;
 	hintNum = 1;
-	
+	win = false;
 
 	for(int i = 1; i < 10; ++i) { //Draw 1-9 Buttons
 		sf::Vector2f tempButtonSize(WINDOW_WIDTH/40, WINDOW_HEIGHT/20);
@@ -35,28 +37,34 @@ GameScreen::GameScreen(Board & newBoard,std::string & inputString, bool & userTy
 void GameScreen::updateScreen(sf::RenderWindow & window) {
 	window.clear(sf::Color::Black);
 	boardPtr->drawBoard(window);
+	makeActionText();
+	boardPtr->drawMiniColorBoard(window, 1);
 
-	if(*isServer){
-		boardPtr->drawMiniColorBoard(window, 1);
-	} else {
-		boardPtr->drawMiniColorBoard(window, 2);
-	}
 
 	Text codenamesLogo("Codenames Duet", sf::Vector2f(WINDOW_WIDTH/3, 0), sf::Color::Green, 42, 
 		"fonts/Xpressive Regular.ttf" );
 
-	if(state == WAITING_FOR_HINT || state == WAITING_FOR_GUESS) { //Inactive Really
-		agentTurn.setTextItems("Agent: " + opponentName + "'s Turn" , sf::Vector2f(WINDOW_WIDTH/40, WINDOW_HEIGHT/10),
-			(*isServer) ? sf::Color::Red : sf::Color::Blue, 48);
-	} else { //Actually your turn!
-		agentTurn.setTextItems("Agent: " + *username + "'s Turn" , sf::Vector2f(WINDOW_WIDTH/40, WINDOW_HEIGHT/10),
-			(*isServer) ? sf::Color::Red : sf::Color::Blue, 48);
-	}
-
 	turnsLeft.draw(window);
 	agentsLeft.draw(window);
 	agentTurn.draw(window);
+	if(state==GAMEOVER) {
+		std::string gameOverText = "";
+		sf::Color t = sf::Color::Red;
+		if(!win) {
+			gameOverText = "LOSER!";
+		} else {
+			gameOverText = "WINNER!";
+			t = sf::Color::Green;
+		}
+		Text gameOverBigBoi(gameOverText, sf::Vector2f(WINDOW_WIDTH/3, WINDOW_HEIGHT/22),t, 128, 
+			"fonts/Xpressive Regular.ttf" );
+		gameOverBigBoi.draw(window);
+	}
+	if(state == WAITING_FOR_CLICK) {
+		guessText.setTextItems("Guesses:" + std::to_string(numOfGuesses), sf::Vector2f(WINDOW_WIDTH/1.25, WINDOW_HEIGHT/1.25), sf::Color::White, 48);
+		guessText.draw(window);
 
+	}
 	for(int i = 1; i < 10; ++i) {
 		allHintNumbers[i-1].draw(window); //Draw 1-9 Buttons
 	}
@@ -67,6 +75,28 @@ void GameScreen::updateScreen(sf::RenderWindow & window) {
     
     window.display();
 }
+
+void GameScreen::makeActionText() {
+	switch(state) {
+		case WAITING_FOR_INPUT: { //Oringally Client
+			agentTurn.setString("Your Turn: Type a Hint!");
+			break;
+		} 
+		case WAITING_FOR_HINT: { //Originally Server!
+			agentTurn.setString(opponentName + "'s' Turn: Waiting on Hint!");
+			break;
+		}
+		case WAITING_FOR_CLICK: {
+			agentTurn.setString("Your Turn: Click Codewords!");
+			break; 
+		}
+		case WAITING_FOR_GUESS: {
+			agentTurn.setString(opponentName + "'s' Turn: Waiting on Guesses!");
+			break; 
+		}
+	}
+}
+
 
 void GameScreen::setUpBoardsMyBoi() {
 	sf::Packet packetWord;
@@ -79,8 +109,9 @@ void GameScreen::setUpBoardsMyBoi() {
 	std::string s;
 
 	if(*isServer) {//SERVER SIDE!!
-		std::string s2;
-		std::string s3;
+		std::string b1;
+		std::string b2;
+		std::string oppName;
 		state = WAITING_FOR_HINT;
 		printDebug("SERVER: STATE IS WAINTING FOR HINT!!");
 
@@ -93,36 +124,44 @@ void GameScreen::setUpBoardsMyBoi() {
 			socket->receive(packetWordRecieve);
 			if (packetWordRecieve >> s >> i) //Getting all words and indexes
 			{
+				std::cout << "Recieved: " << s << " " << i << std::endl;
 			    if(newWords.find(s) == newWords.end()) { //if not in bro
 				    newWords.insert(s);
+				    allWords.push_back(s);
 				    boardPtr->words[i] = s;
 			    }
 			    packetWordRecieve.clear();
 			}			
 		}
-		s = "";
 		socket->receive(packetWordRecieve);
-		if (packetWordRecieve >> s >> s2 >> s3) //Getting boards and opponent name!
+		if (packetWordRecieve >> b1 >> b2 >> oppName) //Getting boards and opponent name!
 		{
-			boardPtr->setBoard(s, 2);
-			boardPtr->setBoard(s2, 1);
-			opponentName = s3;
+			boardPtr->setBoard(b1, 2);
+			boardPtr->setBoard(b2, 1);
+			opponentName = oppName;
+			printBoard(boardPtr->boardOneStructure);//should be mine
+			std::cout << std::endl;
+			printBoard(boardPtr->boardTwoStructure);//should be oppo
+			boardPtr->makeBoardUI();
+			sendName << *username;
+			socket->send(sendName);
+			return;
 		}
 
-		sendName << *username;
-		socket->send(sendName);
-		return;
+
 
 	} else {//CLIENT SIDE
 		state = WAITING_FOR_INPUT;
 		printDebug("CLIENT: STATE IS WAINTING FOR INPUT!!");
+		allHintNumbers[hintNum-1].setColor(sf::Color::Magenta);
 
-		packetBoard << boardPtr->getBoardValues(2);
 		packetBoard << boardPtr->getBoardValues(1);
+		packetBoard << boardPtr->getBoardValues(2);
 		packetBoard << *username;
 
 		for(int i = 0; i < 25;i++) {
 			//printDebug("Sending on ClientSide " + boardPtr->words[i] + " " + std::to_string(i));
+			allWords.push_back(boardPtr->words[i]);
 			packetWord << boardPtr->words[i] << i;
 			if (socket->send(packetWord) != sf::Socket::Done)
 			{
@@ -137,6 +176,10 @@ void GameScreen::setUpBoardsMyBoi() {
 		{
 			opponentName = s;
 		}
+
+		printBoard(boardPtr->boardOneStructure);//should be mine
+		std::cout << std::endl;
+		printBoard(boardPtr->boardTwoStructure);//should be oppo
 		return;
 	}
 }
@@ -150,19 +193,59 @@ void GameScreen::sendHintToOtherPlayer() {
 	}
 }
 
-void GameScreen::waitToRecieveFromOtherPlayer() {
+void GameScreen::waitToRecieveHintFromOtherPlayer() {
 	sf::Packet codewordRecieve;
 	std::string sentHint;
 	int sentNum;
 	socket->receive(codewordRecieve);
 	if(codewordRecieve >> sentHint >> sentNum) {
+		numOfGuesses = sentNum+1;
 		std::string newHint = sentHint + " " + std::to_string(sentNum);
 		currentHint = newHint;
-		currentClue.setString(newHint);
+		currentClue.setString("Current Clue: " + newHint);
 		state = WAITING_FOR_CLICK;
-		return;
 	}
 }
+
+void GameScreen::waitToRecieveGuessFromOtherPlayer() {
+	sf::Packet codewordRecieve;
+	int cardType;
+	int cardI;
+	int cardJ;
+
+	socket->receive(codewordRecieve);
+	if(codewordRecieve >> cardType >> cardI >> cardJ) {
+		switch(cardType) {
+			case 0: {
+				boardPtr->boardOneColorsUI[cardI][cardJ].setColor(sf::Color::Green);
+				break;
+			}
+			case 1: {
+				boardPtr->boardOneColorsUI[cardI][cardJ].setColor(sf::Color::Red);
+				state = GAMEOVER;
+				win = false;
+				break;
+			}
+			case 2: {
+				boardPtr->boardOneColorsUI[cardI][cardI].setColor(sf::Color(186, 157, 70));
+				state = WAITING_FOR_HINT;
+				break;
+			}
+		}
+	}
+}
+
+
+// void GameScreen::waitToRecieveGuessFromOtherPlayer() {
+// 	sf::Packet codewordRecieve;
+// 	std::string sentHint;
+// 	int sentNum;
+// 	socket->receive(codewordRecieve);
+// 	if(codewordRecieve >> sentHint) {
+// 		state = WAITING_FOR_CLICK_Gues;
+// 	}
+// }
+
 
 void GameScreen::waitForInput(sf::RenderWindow & window, char inputUnicode, std::string& input) {
 	if((inputUnicode == 10 || inputUnicode == 12 || inputUnicode == 13) && (input != "")) {//Ret
@@ -186,7 +269,7 @@ void GameScreen::waitForInput(sf::RenderWindow & window, char inputUnicode, std:
         inputItem.updateCursor();
 		updateScreen(window);
 	} else if(inputUnicode >= '1' && inputUnicode <= '9') {
-		allHintNumbers[hintNum].setColor(sf::Color(16,117,24,255));
+		allHintNumbers[hintNum-1].setColor(sf::Color(16,117,24,255));
 		int numToChange = inputUnicode - '0';
 		hintNum = numToChange-1;
 		allHintNumbers[numToChange-1].setColor(sf::Color::Magenta);
@@ -201,22 +284,52 @@ void GameScreen::waitForInput(sf::RenderWindow & window, char inputUnicode, std:
 	}
 }
 
-void GameScreen::checkForAllClicks(sf::RenderWindow & window) {
-	for(int i = 0; i < 5;i++) {
-		for(int j = 0; j < 5;++j) {
-			if(boardPtr->boardOneColorsUI[i][j].checkClick(window)) {
-				printDebug("Clicked This button Bro" + std::to_string(i) +
-				 " " + std::to_string(j) );
+void GameScreen::checkForAllClicks(sf::RenderWindow & window, bool guessing) {
+	if(guessing) {
+		for(int i = 0; i < 5;i++) {
+			for(int j = 0; j < 5;++j) {
+				if(boardPtr->boardOneColorsUI[i][j].checkClick(window)) {
+					sf::Packet cardColorPacket;
+					std::cout << "HERE: " << boardPtr->boardTwoStructure[i][j] << std::endl;
+					cardColorPacket << boardPtr->boardTwoStructure[i][j] <<  i << j;
+					socket->send(cardColorPacket);
+					printDebug("we Did click the Button");
+					switch(boardPtr->boardTwoStructure[i][j]){
+						case 0: {
+							boardPtr->boardOneColorsUI[i][j].setColor(sf::Color::Green);
+							--numOfGuesses;
+							if(numOfGuesses == 0) {
+								state = WAITING_FOR_INPUT;
+								break;
+							}
+							break;
+						}
+						case 1: {
+							boardPtr->boardOneColorsUI[i][j].setColor(sf::Color::Red);
+							state = GAMEOVER;
+							win = false;
+							break;
+						}
+						case 2: {
+							state = WAITING_FOR_INPUT;
+							boardPtr->boardOneColorsUI[i][j].setColor(sf::Color(186, 157, 70));
+							break;
+						}
+					}
+				}
+			}
+		}
+	} else {
+		for(int i = 0; i < 10;i++) {
+			if(allHintNumbers[i].checkClick(window)) {
+				allHintNumbers[hintNum-1].setColor(sf::Color(16,117,24,255));;
+				hintNum = i+1;
+				allHintNumbers[i].setColor(sf::Color::Magenta);
 			}
 		}
 	}
-	for(int i = 0; i < 10;i++) {
-		if(allHintNumbers[i].checkClick(window)) {
-			allHintNumbers[hintNum].setColor(sf::Color(16,117,24,255));;
-			hintNum = i;
-			allHintNumbers[i].setColor(sf::Color::Magenta);
-		}
-	}
+
+
 }
 
 
@@ -248,31 +361,50 @@ int GameScreen::run(sf::RenderWindow & window) {
 			} 
 			switch(state) {
 				case WAITING_FOR_INPUT: { //Oringally Client
+					socket->setBlocking(true);
 					if (e.type == sf::Event::TextEntered) {
 						waitForInput(window, e.text.unicode, input);
+					} else 	if (e.type == sf::Event::MouseButtonPressed) {
+						checkForAllClicks(window,false);
 					}
 					break;
 				} 
 
 				case WAITING_FOR_HINT: { //Originally Server!
-					sf::Thread thread(&GameScreen::waitToRecieveFromOtherPlayer, this);
-					thread.launch();
-					printDebug("LAUCHED WAIT THREAD");
-					thread.wait();
-					thread.terminate();
-					printDebug("TERMINATED THREAD");
+					socket->setBlocking(false);
+					waitToRecieveHintFromOtherPlayer();
 					break;
 				}
 				case WAITING_FOR_CLICK: {
+					socket->setBlocking(true);
 					if (e.type == sf::Event::MouseButtonPressed) {
-						checkForAllClicks(window);
+						checkForAllClicks(window,true);
 					}
 					break;
 				}
-				case WAITING_FOR_GUESS:break; 
+				case WAITING_FOR_GUESS: {
+					socket->setBlocking(false);
+					waitToRecieveGuessFromOtherPlayer();
+					break;
+				} 
 			}
 		}
 	}
 
 	return -1;
 }
+
+
+	// if(*isServer){
+	// 	boardPtr->drawMiniColorBoard(window, 2); //Is
+	// } else {
+	// 	boardPtr->drawMiniColorBoard(window, 1);
+	// }
+
+	// if(state == WAITING_FOR_HINT || state == WAITING_FOR_GUESS) { //Inactive Really
+	// 	agentTurn.setTextItems("Agent: " + opponentName + "'s Turn" , sf::Vector2f(WINDOW_WIDTH/40, WINDOW_HEIGHT/10),
+	// 		(*isServer) ? sf::Color::Red : sf::Color::Blue, 48);
+	// } else { //Actually your turn!
+	// 	agentTurn.setTextItems("Agent: " + *username + "'s Turn" , sf::Vector2f(WINDOW_WIDTH/40, WINDOW_HEIGHT/10),
+	// 		(*isServer) ? sf::Color::Red : sf::Color::Blue, 48);
+	// }

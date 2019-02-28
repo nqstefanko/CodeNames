@@ -6,6 +6,7 @@
 #define WAITING_FOR_HINT 101
 #define WAITING_FOR_CLICK 102
 #define WAITING_FOR_GUESS 103
+#define GAMEOVER 104
 
 
 #include <SFML/Graphics.hpp>
@@ -36,12 +37,19 @@ public:
 	std::string currentHint;
 
 	std::vector<Button> allHintNumbers;
-	int hintNum;
+	std::vector<std::string> allWords;
+	std::vector<int> positions;
+	std::vector<int> filledIn;
 
-	bool opponenetsMove;
-	bool * isServer; 
-	bool setUpDone;
+	std::set<std::string> currentWords;
+	int hintNum;
+	int numOfGuesses;
 	int state = 0;
+
+	bool * isServer; 
+	bool opponenetsMove;
+	bool setUpDone;
+	bool win;
 
 	Board * boardPtr;
 	sf::TcpSocket * socket;
@@ -51,12 +59,16 @@ public:
 	Text agentsLeft;
 	Text agentTurn;
 	Text currentClue;
+	Text guessText;
 
 	void setUpBoardsMyBoi();
 	void sendHintToOtherPlayer();
-	void waitToRecieveFromOtherPlayer();
+	void waitToRecieveHintFromOtherPlayer();
+	void waitToRecieveGuessFromOtherPlayer();
+
 	void waitForInput(sf::RenderWindow & window, char inputUnicode, std::string& input);
-	void checkForAllClicks(sf::RenderWindow & window);
+	void checkForAllClicks(sf::RenderWindow & window, bool guessing);
+	void makeActionText();
 
     GameScreen(Board & newBoard,std::string & inputString, bool & userType,
 	std::string &user, sf::TcpSocket & sock);

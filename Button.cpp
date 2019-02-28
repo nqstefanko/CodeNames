@@ -18,8 +18,7 @@ Button::Button(std::string displayText, sf::Vector2f location,
 }
 Button::Button(const Button & b): 
 	
-	currentText(b.currentText.getString(), sf::Vector2f(b.buttonShape.getPosition().x + b.buttonShape.getSize().x / 6,
-		b.buttonShape.getPosition().y - b.buttonShape.getSize().y / 10), sf::Color::White, 48, 
+	currentText(b.currentText.getString(), b.currentText.getPosition(), sf::Color::White, 48, 
 		"fonts/Xpressive Regular.ttf" )
 {
 	buttonId = b.buttonId;
@@ -32,14 +31,18 @@ Button::Button(const Button & b):
 
 }
 
-void Button::shiftTextInside(sf::Vector2f & shift, sf::RenderWindow & window) {
+void Button::shiftTextInside(sf::Vector2f & shift) {
 	currentText.setPosition(shift);
-	currentText.draw(window);
+	//currentText.draw(window);
 }
 
 void Button::setColor(const sf::Color & color) {
 	buttonShape.setFillColor(color);
 }
+void Button::setText(std::string displayText) {
+	currentText.setString(displayText);
+}
+
 
 
 void Button::draw(sf::RenderWindow & window) {

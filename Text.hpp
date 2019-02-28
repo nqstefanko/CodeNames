@@ -17,6 +17,8 @@ public:
 		int fontSize=36, std::string fontFile="fonts/Xpressive Regular.ttf");
 	void draw(sf::RenderWindow & window);
 	void setPosition(const sf::Vector2f & shift);
+	const sf::Vector2f & getPosition() const;
+
 	std::string getString() const;
 	const sf::Vector2f & getPosition();
 	const sf::FloatRect getGlobalBounds();

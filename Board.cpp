@@ -42,6 +42,13 @@ std::vector<std::vector<int>> Board::generate5x5Board() {
 		}
 		toRet.push_back(temp);
 	}
+	// for(int i = 0; i < 3; i++) {
+	// 	std::cout << i << ": ";
+	// 	for (auto num: teamBreakdown[i]) {
+	// 		std::cout << num << " ";
+	// 	}
+	// 	std::cout << std::endl;
+	// }
 	return toRet;
 }
 
@@ -113,6 +120,7 @@ std::vector<std::vector<int>> Board::generateOpposingBoard() {
 		}
 		toRet.push_back(temp);
 	}
+	opponentBreakdown = newTeamBreakdown;
 	return toRet;
 }
 
@@ -121,32 +129,41 @@ void Board::generateBoards() {
 	
 	boardOneStructure = generate5x5Board();
 	boardTwoStructure = generateOpposingBoard();
+	makeBoardUI();
 	// printBoard(boardOneStructure);
 	// printBoard(boardTwoStructure);
 }
 
-void Board::drawBoard(sf::RenderWindow & window) {
+void Board::makeBoardUI() {
 	int count = 0;
 	for(int i = 0; i < 5; ++i) {
 		std::vector<Button> temp;
 		for(int j = 0; j < 5; ++j) {
-			sf::Vector2f tempButtonSize(window.getSize().x/8, window.getSize().y/12);
-			sf::Vector2f tempButtonLoc(window.getSize().x/32 + (j * 30) + 
-				((window.getSize().x/8) * j), window.getSize().y/30 + window.getSize().y/3 + (20 * i) + 
-				((window.getSize().y/10) * i));
-
-			Button tempBtn(words[count], tempButtonLoc, tempButtonSize,
-			sf::Color::Black, window.getSize().x/38, count);
+			sf::Vector2f tempButtonSize(WINDOW_WIDTH/8, WINDOW_HEIGHT/12);
+			sf::Vector2f tempButtonLoc(WINDOW_WIDTH/32 + (j * 30) + 
+				((WINDOW_WIDTH/8) * j), WINDOW_HEIGHT/30 + WINDOW_HEIGHT/3 + (20 * i) + 
+				((WINDOW_HEIGHT/10) * i));
+			std::cout << words[count] << std::endl;
+			std::string s = words[count];
+			Button tempBtn(s, tempButtonLoc, tempButtonSize,
+			sf::Color::Black, WINDOW_WIDTH/38, count);
 
 			sf::Vector2f theShift(tempButtonLoc.x, 
-				tempButtonLoc.y + 2 * (window.getSize().y/100));
+				tempButtonLoc.y + 2 * (WINDOW_HEIGHT/100));
 
-			tempBtn.shiftTextInside(theShift, window);
+			tempBtn.shiftTextInside(theShift);
 			temp.push_back(tempBtn);
-			tempBtn.draw(window);
 			count++;
 		}
 		boardOneColorsUI.push_back(temp);
+	}
+}
+
+void Board::drawBoard(sf::RenderWindow & window) {
+	for(int i = 0; i < 5; ++i) {
+		for(int j = 0; j < 5; ++j) {		
+			boardOneColorsUI[i][j].draw(window);
+		}
 	}
 }
 
@@ -194,14 +211,17 @@ void Board::drawMiniColorBoard(sf::RenderWindow & window, int boardNumber) {
 
 
 void Board::setBoard(std::string allBoardValues, int boardNumber) {
+	teamBreakdown.clear();
 	for(int count = 0; count < allBoardValues.length();++count) {
 		int i = count/5;
 		int j = count%5;
-		int num = allBoardValues[count] -'0';
+		int num = allBoardValues[count] -'0';//get at index and set that 0,1,2
+		teamBreakdown[allBoardValues[count]].push_back(count);
 		if(boardNumber == 1) {
-			boardOneStructure[i][j] = num;
+			boardOneColorsUI[i][j].setText(words[count]);
+			boardOneStructure[i][j] = num; //player/client
 		} else {
-			boardTwoStructure[i][j] = num;
+			boardTwoStructure[i][j] = num; //opponent/server
 		}
 	}
 }
@@ -219,6 +239,7 @@ std::string Board::getBoardValues(int num) {
 	}
 	return toRet;
 }
+
 
 
 void Board::setWords(std::string newWord, int num) {

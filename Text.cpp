@@ -31,6 +31,10 @@ void Text::setTextItems(std::string displayText, sf::Vector2f location, const sf
 }
 
 
+const sf::Vector2f & Text::getPosition() const {
+	return 	currentText.getPosition();
+}
+
 void Text::setPosition(const sf::Vector2f & shift) {
 	currentText.setPosition(shift);
 }
