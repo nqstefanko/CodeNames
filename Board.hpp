@@ -12,7 +12,7 @@ public:
 	std::vector<std::vector<int>> generate5x5Board();
 	std::vector<std::vector<int>> generateOpposingBoard();
 	void generateBoards();
-	void setBoard(std::string allBoardValues);
+	void setBoard(std::string allBoardValues, int boardNumber);
 	void setWords(std::string newWord, int num);
 	void drawBoard(sf::RenderWindow & window);
 	void drawMiniColorBoard(sf::RenderWindow & window, int boardNumber);
@@ -20,7 +20,6 @@ public:
 	std::string getBoardValues(int num);
 	std::vector<std::string> words;
 	
-private:
 	std::map<int, std::vector<int>> teamBreakdown;
 	std::vector<std::vector<int>> boardOneStructure;
 	std::vector<std::vector<int>> boardTwoStructure;

@@ -17,11 +17,12 @@ public:
 		int fontSize=36, std::string fontFile="fonts/Xpressive Regular.ttf");
 	void draw(sf::RenderWindow & window);
 	void setPosition(const sf::Vector2f & shift);
+	std::string getString() const;
 	const sf::Vector2f & getPosition();
 	const sf::FloatRect getGlobalBounds();
 	void setString(std::string s);
 
-
+	std::string theText;
 
 private:
 	sf::Font font;

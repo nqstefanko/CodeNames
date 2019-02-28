@@ -25,7 +25,7 @@ int main(int argc, char ** argv) {
 	window.display(); //Clears Screen Initially Before Opening menu
 		
 	sf::TcpSocket socket;
-	std::string username = "agentMyBoi";
+	std::string username = "";
 	std::string codeword = "";
 	std::string ip = "";
 	bool serverUser = false;
@@ -33,14 +33,14 @@ int main(int argc, char ** argv) {
 	Board gameboard;
 	gameboard.generateBoards();
 
-	// InputScreen startScreen(username,ip, std::string("Enter your name (Max 20 Characters)"), 20);
-	// screenContainer.push_back(&startScreen);
+	InputScreen startScreen(username,ip, std::string("Enter your name (Max 20 Characters)"), 20);
+	screenContainer.push_back(&startScreen);
 
-	// ChoosingScreen chooseScreen(serverUser);
-	// screenContainer.push_back(&chooseScreen);
+	ChoosingScreen chooseScreen(serverUser);
+	screenContainer.push_back(&chooseScreen);
 
-	// ConnectionScreen connScreen(serverUser, socket, username,ip);
-	// screenContainer.push_back(&connScreen);
+	ConnectionScreen connScreen(serverUser, socket, username,ip);
+	screenContainer.push_back(&connScreen);
 
 	GameScreen game(gameboard, codeword, serverUser, username, socket);
 	screenContainer.push_back(&game);

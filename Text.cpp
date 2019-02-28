@@ -1,5 +1,4 @@
 #include "Text.hpp"
-
 // Text::Text(){
 // 	if (!Text::font.loadFromFile("fonts/Xpressive Regular.ttf"))
 // 	{
@@ -23,7 +22,7 @@ void Text::setTextItems(std::string displayText, sf::Vector2f location, const sf
 	{
 	    std::cout << "Unable to Load Font" << std::endl;
 	}
-
+	theText = displayText;
 	currentText.setFont(font); // font is a sf::Font
 	currentText.setString(displayText);
 	currentText.setPosition(location.x,location.y);
@@ -41,6 +40,10 @@ const sf::Vector2f & Text::getPosition() {
 }
 const sf::FloatRect Text::getGlobalBounds() {
 	return currentText.getGlobalBounds();
+}
+
+std::string Text::getString() const {
+	return theText;
 }
 
 void Text::setString(std::string s) {

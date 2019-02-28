@@ -121,8 +121,8 @@ void Board::generateBoards() {
 	
 	boardOneStructure = generate5x5Board();
 	boardTwoStructure = generateOpposingBoard();
-	printBoard(boardOneStructure);
-	printBoard(boardTwoStructure);
+	// printBoard(boardOneStructure);
+	// printBoard(boardTwoStructure);
 }
 
 void Board::drawBoard(sf::RenderWindow & window) {
@@ -193,12 +193,16 @@ void Board::drawMiniColorBoard(sf::RenderWindow & window, int boardNumber) {
 }
 
 
-void Board::setBoard(std::string allBoardValues) {
+void Board::setBoard(std::string allBoardValues, int boardNumber) {
 	for(int count = 0; count < allBoardValues.length();++count) {
 		int i = count/5;
 		int j = count%5;
 		int num = allBoardValues[count] -'0';
-		boardOneStructure[i][j] = num;
+		if(boardNumber == 1) {
+			boardOneStructure[i][j] = num;
+		} else {
+			boardTwoStructure[i][j] = num;
+		}
 	}
 }
 

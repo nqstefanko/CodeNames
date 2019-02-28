@@ -8,6 +8,7 @@
 
 #include "ButtonActions.hpp"
 #include "Text.hpp"
+#include "Util.hpp"
 
 class Button
 {
@@ -15,6 +16,7 @@ public:
 	int buttonId;
 	Button(std::string displayText, sf::Vector2f location, sf::Vector2f size,
 		const sf::Color & color, int fontSize, int newBid);
+	Button(const Button & b);
 	void setColor(const sf::Color & color);
 	bool checkClick (sf::RenderWindow & window);
 	void draw(sf::RenderWindow & window);
