@@ -44,6 +44,7 @@ public:
 	std::set<std::string> currentWords;
 	int hintNum;
 	int numOfGuesses;
+	int turns;
 	int state = 0;
 
 	bool * isServer; 
@@ -60,6 +61,8 @@ public:
 	Text agentTurn;
 	Text currentClue;
 	Text guessText;
+
+	Button endTurnButton;
 
 	void setUpBoardsMyBoi();
 	void sendHintToOtherPlayer();
