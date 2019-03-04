@@ -19,7 +19,8 @@ int main(int argc, char ** argv) {
 	std::vector<CScreen*> screenContainer;
 	int currentScreen = 0;
 	
-	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "SFML Window");
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32),
+		"SFML Window");
 	window.setFramerateLimit(FPS);
 	window.clear(sf::Color::Black);
 	window.display(); //Clears Screen Initially Before Opening menu
@@ -28,22 +29,23 @@ int main(int argc, char ** argv) {
 	std::string username = "";
 	std::string codeword = "";
 	std::string ip = "";
-	bool serverUser = false;
+	bool serverUser = false;  //Key Vars
 
 	Board gameboard;
 	gameboard.generateBoards();
 
-	InputScreen startScreen(username,ip, std::string("Enter your name (Max 20 Characters)"), 20);
-	screenContainer.push_back(&startScreen);
+	InputScreen startScreen(username,ip, 
+		std::string("Enter your name (Max 20 Characters)"), 20);
+	screenContainer.push_back(&startScreen);//0
 
 	ChoosingScreen chooseScreen(serverUser);
-	screenContainer.push_back(&chooseScreen);
+	screenContainer.push_back(&chooseScreen);//1
 
 	ConnectionScreen connScreen(serverUser, socket, username,ip);
-	screenContainer.push_back(&connScreen);
+	screenContainer.push_back(&connScreen); //2
 
 	GameScreen game(gameboard, codeword, serverUser, username, socket);
-	screenContainer.push_back(&game);
+	screenContainer.push_back(&game); //3
 	
 	while (currentScreen >= 0)
 	{
@@ -51,7 +53,7 @@ int main(int argc, char ** argv) {
 	}
 
 	printDebug("Closing Program");
-
+	window.close();
 	return 0;
 	
 }

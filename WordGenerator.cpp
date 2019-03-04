@@ -2,16 +2,17 @@
 
 WordGenerator::WordGenerator(std::string filename) {
     std::ifstream inFile;
-    std::string word;
-
+	std::string line;
+	
     inFile.open(filename.c_str());
     if (!inFile) {
         std::cout << "Unable to open file";
         exit(1); // terminate with error
     }
-    
-    while (inFile >> word) {
-        allWords.push_back(word);
+
+	while (std::getline(inFile, line))
+	{
+		allWords.push_back(line);
     }
     
     inFile.close();
@@ -20,12 +21,8 @@ WordGenerator::WordGenerator(std::string filename) {
 
 std::vector<std::string> WordGenerator::generateWords(int numberOFWords) {
 	std::set<std::string> currentGameWords;
-	std::random_device device;
-
-
-	std::default_random_engine engine{device()};
-
-
+	std::random_device device; //Make Device
+	std::default_random_engine engine{device()}; //Get Random Engine with Device
 	std::uniform_int_distribution<int> distribution{0, (int)(allWords.size())};
 
 

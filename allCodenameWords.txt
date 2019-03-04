@@ -121,6 +121,7 @@ Church
 Circus
 Clay
 Cliff
+Climb
 Cloak
 Clockwork
 Clown
@@ -207,6 +208,7 @@ Escalator
 Eureka
 Europe
 Evolution
+Explode
 Extension
 Eyebrow
 Fan
@@ -226,6 +228,7 @@ Fizz
 Flagpole
 Flannel
 Flashlight
+Floodlight
 Flock
 Flotsam
 Flower
@@ -382,6 +385,8 @@ Monster
 Mooch
 Moon
 Mop
+Mosquito
+Mosque
 Moth
 Motorcycle
 Mountain
@@ -446,6 +451,7 @@ Pilot
 Pinch
 Ping
 Pinwheel
+Pipe
 Pirate
 Plaid
 Plan
@@ -660,10 +666,12 @@ Windmill
 Winter
 Wish
 Wolf
+Woman
 Wool
 World
 Worm
 Wristwatch
+Xray
 Yardstick
 Zamboni
 Zen

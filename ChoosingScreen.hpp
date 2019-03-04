@@ -14,7 +14,7 @@
 class ChoosingScreen : public CScreen {
 private:
 	bool * isServer; 
-	void updateScreen(sf::RenderWindow & window, std::vector<Button>& allButtons);
+	void updateScreen(sf::RenderWindow & window, std::vector<Button> & allButtons);
 
 public:
     ChoosingScreen(bool & userType);

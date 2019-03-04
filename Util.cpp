@@ -6,7 +6,20 @@ extern const int FPS = 60;
 extern const bool  DEBUG = true;
 extern const int CLIENT_USER = 0;
 extern const int SERVER_USER = 1;
+extern const int INPUT_SCREEN = 0;
+extern const int CHOOSE_SCREEN = 1;
+extern const int CONN_SCREEN = 2;
+extern const int GAMESCREEN_SCREEN = 3;
+extern const int DISCONNECT = -1;
+extern const std::string FONTF = "fonts/Xpressive Regular.ttf";
 
+sf::Vector2f getV2f(float x, float y, bool divByWindow) {
+	if(divByWindow) {
+		return sf::Vector2f(WINDOW_WIDTH/x, WINDOW_HEIGHT/y);
+	} else {
+		return sf::Vector2f(x, y);
+	}
+} 
 void printDebug(std::string s) {
 	if(DEBUG) {
 		std::cout << s << std::endl;

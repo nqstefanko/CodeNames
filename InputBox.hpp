@@ -16,7 +16,8 @@ public:
     Text inputText, queryText;
     int maxChar;
 
-    InputBox(std::string & inputString, std::string queryMessage="Input Codeword", int maxCharacter=24);
+    InputBox(std::string & inputString, std::string queryMessage="Input Codeword",
+        int maxCharacter=24);
     void updateCursor();
     void initInputComponents();
     void initTextComponents();

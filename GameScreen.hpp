@@ -55,8 +55,10 @@ public:
 	bool win;
 	bool suddenDeath;
 	bool finalTurn;
+	bool disconnect;
 
 
+	std::set<int> alreadyPressed;
 	Board * boardPtr;
 	sf::TcpSocket * socket;
 	InputBox inputItem;
@@ -74,7 +76,8 @@ public:
 	void waitToRecieveHintFromOtherPlayer();
 	void waitToRecieveGuessFromOtherPlayer();
 
-	void waitForInput(sf::RenderWindow & window, char inputUnicode, std::string& input);
+	void waitForInput(sf::RenderWindow & window, char inputUnicode, 
+		std::string& input);
 	void checkForAllClicks(sf::RenderWindow & window, bool guessing);
 	void makeActionText();
 

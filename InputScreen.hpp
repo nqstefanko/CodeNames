@@ -20,7 +20,8 @@ private:
     void updateScreen(sf::RenderWindow & window);
 
 public:
-    InputScreen(std::string & inputString, std::string & ip, std::string queryMessage, int maxCharacter);
+    InputScreen(std::string & inputString, std::string & ip, 
+    	std::string queryMessage, int maxCharacter);
     virtual int run(sf::RenderWindow & window);
 };
 

@@ -18,7 +18,7 @@ void InputBox::initInputComponents() {
     inputRect.setPosition(WINDOW_WIDTH / 12.5f - inputRect.getSize().x / 12.5f,
         WINDOW_HEIGHT / 3.2f - inputRect.getSize().y / 3.2f);
 
-    cursor.setSize(sf::Vector2f(2.0f, 27.0f));
+    cursor.setSize(getV2f(2,27));
     cursor.setOrigin(0, cursor.getSize().y / 2.0f);
     cursor.setFillColor(sf::Color::White);
 }
@@ -27,8 +27,8 @@ void InputBox::initTextComponents() {
 	sf::Vector2f location(WINDOW_WIDTH / 12.0f - inputRect.getSize().x / 12.0f,
         WINDOW_HEIGHT / 3.2f - inputRect.getSize().y / 3.2f - 5);
 	inputText.setTextItems(*inputStr, location);
-	queryText.setTextItems(queryMsg, sf::Vector2f(location.x,location.y-50), sf::Color::White,
-		48);
+	queryText.setTextItems(queryMsg, sf::Vector2f(location.x,location.y-50),
+        sf::Color::White, 48);
 	updateCursor();
 }
 
@@ -44,7 +44,6 @@ bool InputBox::validateInput(int ascii_id) {
     if (ascii_id >= '0' && ascii_id <= '9') return true;
     return (ascii_id >= 'a' && ascii_id <= 'z') || (ascii_id <= '.');
 }
-
 
 void InputBox::updateScreen(sf::RenderWindow & window) {
    	window.draw(inputRect);

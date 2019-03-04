@@ -2,7 +2,6 @@
 
 Button::Button(std::string displayText, sf::Vector2f location, 
 	sf::Vector2f buttonSize, const sf::Color & color, int fontSize, int newBid): 
-	
 	currentText(displayText, sf::Vector2f(location.x + buttonSize.x / 6,
 		location.y - buttonSize.y / 10), sf::Color::White, fontSize, 
 		"fonts/Xpressive Regular.ttf" )
@@ -16,13 +15,13 @@ Button::Button(std::string displayText, sf::Vector2f location,
     currentState = false;
 
 }
-Button::Button(const Button & b): 
-	
-	currentText(b.currentText.getString(), b.currentText.getPosition(), sf::Color::White, 48, 
-		"fonts/Xpressive Regular.ttf" )
+Button::Button(const Button & b): 	
+	currentText(b.currentText.getString(), b.currentText.getPosition(), 
+		sf::Color::White, 48, "fonts/Xpressive Regular.ttf" )
 {
 	buttonId = b.buttonId;
-    buttonShape.setPosition(b.buttonShape.getPosition().x, b.buttonShape.getPosition().y);
+    buttonShape.setPosition(b.buttonShape.getPosition().x, 
+    	b.buttonShape.getPosition().y);
     buttonShape.setSize(b.buttonShape.getSize());
     buttonShape.setFillColor(b.buttonShape.getFillColor());
     buttonShape.setOutlineThickness(-1);
@@ -33,7 +32,6 @@ Button::Button(const Button & b):
 
 void Button::shiftTextInside(sf::Vector2f & shift) {
 	currentText.setPosition(shift);
-	//currentText.draw(window);
 }
 
 void Button::setColor(const sf::Color & color) {
@@ -42,8 +40,6 @@ void Button::setColor(const sf::Color & color) {
 void Button::setText(std::string displayText) {
 	currentText.setString(displayText);
 }
-
-
 
 void Button::draw(sf::RenderWindow & window) {
 	window.draw(buttonShape);

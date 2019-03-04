@@ -1,1 +1,1 @@
-Yah man
+The board game Codenames Duet written in C++ playable over a TCP Connection using the framework SFML.

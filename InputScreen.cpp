@@ -1,6 +1,7 @@
 #include "InputScreen.hpp"
 
-InputScreen::InputScreen(std::string & inputString, std::string & ip, std::string queryMessage, int maxCharacter)
+InputScreen::InputScreen(std::string & inputString, std::string & ip, 
+	std::string queryMessage, int maxCharacter)
 :inputItem(inputString,queryMessage,maxCharacter)
 {
 	ipAddress = &ip;
@@ -14,17 +15,16 @@ int InputScreen::run(sf::RenderWindow & window) {
 		inputItem.updateCursor();
 		sf::Event e;
 		while(window.pollEvent(e)) {
-			if(e.type == sf::Event::Closed) {
+			if(e.type == sf::Event::Closed) { //Dicon
 				printDebug("Closing Input String");
-				window.close();
-				return -1;
+				return DISCONNECT;
 			} else if (e.type == sf::Event::TextEntered) {
-				if(e.text.unicode == 10 || e.text.unicode == 12 || e.text.unicode == 13) {//Ret
+				if(e.text.unicode == 10 || e.text.unicode == 13) {//Return 12
 					printDebug("Entered " + input);
 					*ipAddress = input;
 					if(inputItem.queryMsg == "Enter IP Address Please") {
 						printDebug(*ipAddress);
-						return 2;
+						return CONN_SCREEN;
 					}
 
 					inputItem.queryMsg = "Enter IP Address Please";
@@ -32,7 +32,7 @@ int InputScreen::run(sf::RenderWindow & window) {
 					*(inputItem.inputStr) = input;
 					input = "";
 					inputItem.inputText.setString("");
-					return 1;
+					return CHOOSE_SCREEN;
 
 				} else if (e.text.unicode == 8) { //Back Space
 					input = input.substr(0, input.size()-1);
@@ -40,7 +40,8 @@ int InputScreen::run(sf::RenderWindow & window) {
                     inputItem.updateCursor();
 					updateScreen(window);
 				} else {
-					if(inputItem.validateInput(e.text.unicode) && input.length() < inputItem.maxChar) {
+					if(inputItem.validateInput(e.text.unicode) && 
+						(input.length() < inputItem.maxChar)) { //Text/Num
 					char characterTyped = static_cast<char>(e.text.unicode);
                     input += characterTyped;
                     inputItem.inputText.setString(input);

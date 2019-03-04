@@ -42,13 +42,7 @@ std::vector<std::vector<int>> Board::generate5x5Board() {
 		}
 		toRet.push_back(temp);
 	}
-	// for(int i = 0; i < 3; i++) {
-	// 	std::cout << i << ": ";
-	// 	for (auto num: teamBreakdown[i]) {
-	// 		std::cout << num << " ";
-	// 	}
-	// 	std::cout << std::endl;
-	// }
+
 	return toRet;
 }
 
@@ -80,8 +74,6 @@ std::vector<std::vector<int>> Board::generateOpposingBoard() {
           		std::end(allNumbers));
 		}
 	}
-
-
 	int count = 0;
 
 	std::random_device device;//Spawn random device
@@ -108,9 +100,7 @@ std::vector<std::vector<int>> Board::generateOpposingBoard() {
 			toConvert[num] = i;
 		}
 	}
-	// for (auto e: toConvert) {
-	// 	std::cout << e << " ";
-	// }
+
 	std::cout << std::endl;
 
 	for(int i = 0; i < 5; ++i) {
@@ -139,17 +129,18 @@ void Board::makeBoardUI() {
 	for(int i = 0; i < 5; ++i) {
 		std::vector<Button> temp;
 		for(int j = 0; j < 5; ++j) {
-			sf::Vector2f tempButtonSize(WINDOW_WIDTH/8, WINDOW_HEIGHT/12);
-			sf::Vector2f tempButtonLoc(WINDOW_WIDTH/32 + (j * 30) + 
-				((WINDOW_WIDTH/8) * j), WINDOW_HEIGHT/30 + WINDOW_HEIGHT/3 + (20 * i) + 
-				((WINDOW_HEIGHT/10) * i));
-			//std::cout << words[count] << std::endl;
+			sf::Vector2f tempButtonSize(WINDOW_WIDTH / 8, WINDOW_HEIGHT / 12);
+			sf::Vector2f tempButtonLoc(WINDOW_WIDTH / 32 + (j * 30) + 
+				((WINDOW_WIDTH / 8) * j), WINDOW_HEIGHT / 30 + WINDOW_HEIGHT / 3
+				 + (20 * i) + ((WINDOW_HEIGHT / 10) * i));
+			//std::cout << words[count] << " " << i << " " <<  j << std::endl;
+			printDebug(words[count]);
 			std::string s = words[count];
 			Button tempBtn(s, tempButtonLoc, tempButtonSize,
-			sf::Color::Black, WINDOW_WIDTH/38, count);
+			sf::Color::Black, WINDOW_WIDTH / 38, count);
 
 			sf::Vector2f theShift(tempButtonLoc.x, 
-				tempButtonLoc.y + 2 * (WINDOW_HEIGHT/100));
+				tempButtonLoc.y + 2 * (WINDOW_HEIGHT / 100));
 
 			tempBtn.shiftTextInside(theShift);
 			temp.push_back(tempBtn);
@@ -172,10 +163,10 @@ void Board::drawMiniColorBoard(sf::RenderWindow & window, int boardNumber) {
 	for(int i = 0; i < 5; ++i) {
 		std::vector<Button> temp;
 		for(int j = 0; j < 5; ++j) {
-			sf::Vector2f tempButtonSize(window.getSize().x/32, window.getSize().y/36);
+			sf::Vector2f tempButtonSize(window.getSize().x / 32, window.getSize().y/36);
 			sf::Vector2f tempButtonLoc(window.getSize().x/1.5 + (j * 15) + 
-				((window.getSize().x/32) * j), window.getSize().y/30 + window.getSize().y/30 + (10 * i) + 
-				((window.getSize().y/30) * i));
+				((window.getSize().x / 32) * j), window.getSize().y / 30 + 
+				window.getSize().y / 30 + (10 * i) + ((window.getSize().y/30) * i));
 			std::vector<std::vector<int>> * boardPtr;
 			Button tempBtn("", tempButtonLoc, tempButtonSize,
 				sf::Color::Black, window.getSize().x/38, count);
@@ -186,15 +177,14 @@ void Board::drawMiniColorBoard(sf::RenderWindow & window, int boardNumber) {
 				boardPtr = &boardTwoStructure;
 			}
 
-			//printDebug("Num: " + std::to_string((*boardPtr)[i][j]));
 			switch((*boardPtr)[i][j]) {
-				case 0:
+				case 0: //Green
 					tempBtn.setColor(sf::Color::Green);
 					break;
-				case 1:
+				case 1: //Assassin
 					tempBtn.setColor(sf::Color::Black);
 					break;
-				default:
+				default: //Bystander
 					tempBtn.setColor(sf::Color::White);
 					break;
 			}
@@ -240,24 +230,19 @@ std::string Board::getBoardValues(int num) {
 	return toRet;
 }
 
-
-
 void Board::setWords(std::string newWord, int num) {
 	words[num] = newWord;
 }
 
 
 
-
-
-
-
-
-
-
-
-
-
+	// for(int i = 0; i < 3; i++) {
+	// 	std::cout << i << ": ";
+	// 	for (auto num: teamBreakdown[i]) {
+	// 		std::cout << num << " ";
+	// 	}
+	// 	std::cout << std::endl;
+	// }
 
 // #include "SpyMasterBoardScreen.hpp"
 

@@ -27,10 +27,10 @@ int ChoosingScreen::run(sf::RenderWindow & window) {
 				*isServer = i;
 				if(*isServer) {
 					printDebug("Clicked Server");
-					return 2;
+					return CONN_SCREEN;
 				} else {
 					printDebug("Clicked Client");
-					return 0;
+					return INPUT_SCREEN;
 				}
 			}		
 		}
@@ -38,15 +38,15 @@ int ChoosingScreen::run(sf::RenderWindow & window) {
 		while(window.pollEvent(e)) {
 			if(e.type == sf::Event::Closed) {
 				printDebug("Closing Input String");
-				window.close();
-				return -1;
+				return DISCONNECT;
 			}
 		}
 	}
-	return -1;
+	return DISCONNECT;
 }
 
-void ChoosingScreen::updateScreen(sf::RenderWindow & window, std::vector<Button> & allButtons) {
+void ChoosingScreen::updateScreen(sf::RenderWindow & window, 
+	std::vector<Button> & allButtons) {
 	window.clear(sf::Color::Black);
 	for(int i = 0; i < allButtons.size(); ++i) {
 		allButtons[i].draw(window);

@@ -19,6 +19,7 @@ private:
 	std::string ipAddress;
 	std::string * username;
 	Text theText;
+	int count;
 	bool * isServer; 
 	bool connected;
 	void makeConnection();
