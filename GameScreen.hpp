@@ -6,8 +6,8 @@
 #define WAITING_FOR_HINT 101
 #define WAITING_FOR_CLICK 102
 #define WAITING_FOR_GUESS 103
-#define GAMEOVER 104
-
+#define SUDDEN_DEATH 104
+#define GAMEOVER 105
 
 #include <SFML/Graphics.hpp>
 
@@ -45,12 +45,15 @@ public:
 	int hintNum;
 	int numOfGuesses;
 	int turns;
+	int agents;
+	int agentOnBoardLeft;
 	int state = 0;
 
 	bool * isServer; 
 	bool opponenetsMove;
 	bool setUpDone;
 	bool win;
+	bool suddenDeath;
 
 	Board * boardPtr;
 	sf::TcpSocket * socket;
