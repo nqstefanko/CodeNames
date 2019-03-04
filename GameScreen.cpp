@@ -247,15 +247,10 @@ void GameScreen::waitToRecieveGuessFromOtherPlayer() {
 				break;
 			}
 			case 3: {
-				if(suddenDeath) {
-
-				} else {
-					std::cout << "ENDED GUESS" << std::endl;
-					turns--;
-					state = WAITING_FOR_HINT;
-					break;	
-				}
-				
+				std::cout << "ENDED GUESS" << std::endl;
+				turns--;
+				state = WAITING_FOR_HINT;
+				break;
 			}
 		}
 		codewordRecieve.clear();
@@ -434,18 +429,6 @@ int GameScreen::run(sf::RenderWindow & window) {
 					break;
 				}				
 				case SUDDEN_DEATH: {
-					if(prevState == WAITING_FOR_INPUT) {
-						if(agentOnBoardLeft == 0) {
-							state = WAITING_FOR_GUESS
-							sf::Packet endGuessPacket;
-							endGuessPacket << 3 << 10 << 10;
-							socket->send(endGuessPacket);
-						}
-					}
-					if(prevState == WAITING_FOR_HINT) {
-						state = WAITING_FOR_GUESS
-						numOfGuesses
-					}
 					break;
 				} 
 			}
