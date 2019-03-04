@@ -3,7 +3,7 @@
 ConnectionScreen::ConnectionScreen(bool & isThisTheServer, sf::TcpSocket & socket,
 	std::string & user, std::string ip):
 	theText("Awaiting Connection...", getV2f(3, 3, true), sf::Color::White, 48, 
-		"fonts/Xpressive Regular.ttf" )
+		FONTF )
 	{
 	count = 0;
 	isServer = &isThisTheServer;

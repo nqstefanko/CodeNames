@@ -50,7 +50,7 @@ void Text::draw(sf::RenderWindow & window) {
 
 
 // Text::Text(){
-// 	if (!Text::font.loadFromFile("fonts/Xpressive Regular.ttf"))
+// 	if (!Text::font.loadFromFile(FONTF))
 // 	{
 // 	    std::cout << "Unable to Load Font" << std::endl;
 // 	}

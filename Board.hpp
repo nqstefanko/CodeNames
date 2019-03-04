@@ -5,6 +5,9 @@
 #include "WordGenerator.hpp"
 #include "Util.hpp"
 
+
+//On retropect would have improved this by fixing the generation of boards, and how they are displayed.
+//Would have made the picking more straightforward, and the sharing easier.
 class Board
 {
 public:///0 is green, 1 is assassin, 2 is neutral

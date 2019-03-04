@@ -409,9 +409,9 @@ void Board::setWords(std::string newWord, int num) {
 // // 	Button QuitButton("Quit", sf::Vector2f(0, 0), sf::Vector2f(app.getSize().x/8, app.getSize().y/15),
 // // 		 sf::Color::Red, app.getSize().x/30,0);
 // // 	Text title("Codenames", sf::Vector2f(app.getSize().x/5, app.getSize().y/13), sf::Color::White,
-// // 	 app.getSize().x/10,"fonts/Xpressive Regular.ttf");
+// // 	 app.getSize().x/10,FONTF);
 // // 	Text menu("Menu", sf::Vector2f(app.getSize().x/2.5, app.getSize().y/4), sf::Color::Blue,
-// // 	 app.getSize().x/12,"fonts/Xpressive Regular.ttf");
+// // 	 app.getSize().x/12,FONTF);
 
 
 // // 	QuitButton.draw(app);

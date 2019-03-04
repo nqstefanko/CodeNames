@@ -3,18 +3,15 @@
 GameScreen::GameScreen(Board & newBoard,std::string & inputString, bool & userType,
 	std::string &user, sf::TcpSocket & sock):
 	inputItem(inputString), 
-	turnsLeft("Turns:9", getV2f(1.25,1.5,true), sf::Color::White, 48,
-		"fonts/Xpressive Regular.ttf" ),
-	agentsLeft("Agents:0", getV2f(1.25,1.75,true), sf::Color::White, 48,
-		"fonts/Xpressive Regular.ttf" ),
+	turnsLeft("Turns:9", getV2f(1.25, 1.5, true), sf::Color::White, 48, FONTF),
+	agentsLeft("Agents:0", getV2f(1.25, 1.75, true), sf::Color::White, 48, FONTF),
 	agentTurn("Agent: " + user + "'s Turn" , getV2f(40, 10, true),
-	 (userType) ? sf::Color::Red : sf::Color::Blue, 48, "fonts/Xpressive Regular.ttf"),
-	currentClue("Current Clue: Waiting on Sender!", getV2f(40,30,true),
-		sf::Color::Green, 48, "fonts/Xpressive Regular.ttf" ),
-	guessText("Guesses:", getV2f(1.25,1.25,true), sf::Color::White, 48, 
-		"fonts/Xpressive Regular.ttf" ),
-	endTurnButton("End\nTurn",getV2f(1.5,3.5,true),getV2f(14,15,true), 
-		sf::Color::Red, 32,50)
+		(userType) ? sf::Color::Red : sf::Color::Blue, 48, FONTF),
+	currentClue("Current Clue: Waiting on Sender!", getV2f(40, 30, true),
+		sf::Color::Green, 48, FONTF ),
+	guessText("Guesses:", getV2f(1.25, 1.25, true), sf::Color::White, 36, FONTF),
+	endTurnButton("End\nTurn",getV2f(1.5, 3.5, true),getV2f(14, 15, true), 
+		sf::Color::Red, 32, 50)
 	
 {
 	std::cout << userType << user << std::endl;
@@ -25,18 +22,19 @@ GameScreen::GameScreen(Board & newBoard,std::string & inputString, bool & userTy
 	setUpDone= false;
 	hintNum = 1;
 	win = false;
-	turns = 9;
+	turns = 1;
 	agentOnBoardLeft = 9;
+	opponentsAgentsLeft = 9;
 	agents = 0;
 	finalTurn = false;
 	disconnect = false;
 
 	for(int i = 1; i < 10; ++i) { //Draw 1-9 Buttons
-		sf::Vector2f tempButtonSize(WINDOW_WIDTH/40, WINDOW_HEIGHT/20);
-		sf::Vector2f tempButtonLoc(WINDOW_WIDTH/1.35, 
-			WINDOW_HEIGHT/3.35 +((WINDOW_HEIGHT/16)+3)*i );
+		sf::Vector2f tempButtonSize(WINDOW_WIDTH / 40, WINDOW_HEIGHT / 20);
+		sf::Vector2f tempButtonLoc(WINDOW_WIDTH / 1.35, 
+			WINDOW_HEIGHT / 3.35 +((WINDOW_HEIGHT / 16) + 3) * i );
 		Button tempBtn(std::to_string(i), tempButtonLoc, tempButtonSize,
-			sf::Color(16,117,24,255), WINDOW_WIDTH/38, i+1100);
+			sf::Color(16, 117, 24, 255), WINDOW_WIDTH / 38, i + 1100);
 		allHintNumbers.push_back(tempBtn);
 	}
 }
@@ -51,10 +49,11 @@ void GameScreen::updateScreen(sf::RenderWindow & window) {
 
 	allHintNumbers[hintNum-1].setColor(sf::Color::Magenta);
 
-	Text codenamesLogo("Codenames Duet", sf::Vector2f(WINDOW_WIDTH/3, 0), 
-		sf::Color::Green, 42, "fonts/Xpressive Regular.ttf" );
+	Text codenamesLogo("Codenames Duet", sf::Vector2f(WINDOW_WIDTH / 3, 0), 
+		sf::Color::Green, 42, FONTF );
 	if(suddenDeath) {
 		turnsLeft.setString("SUDDEN DEATH");
+		agentTurn.setString("YOUR TURN!");
 	} else {
 		turnsLeft.setString("Turns:" + std::to_string(turns));
 	}
@@ -62,7 +61,7 @@ void GameScreen::updateScreen(sf::RenderWindow & window) {
 	agentsLeft.setString("Agents:" + std::to_string(agents));
 	agentsLeft.draw(window);
 	agentTurn.draw(window);
-	if(state==GAMEOVER) {
+	if(state == GAMEOVER) {
 		std::string gameOverText = "";
 		sf::Color t = sf::Color::Red;
 		if(!win) {
@@ -71,15 +70,23 @@ void GameScreen::updateScreen(sf::RenderWindow & window) {
 			gameOverText = "WINNER!";
 			t = sf::Color::Green;
 		}
-		Text gameOverBigBoi(gameOverText, getV2f(3,22,true),t, 128, 
-			"fonts/Xpressive Regular.ttf" );
+		Text gameOverBigBoi(gameOverText, getV2f(3, 22, true), t, 128, FONTF);
 		gameOverBigBoi.draw(window);
 	}
 	if(state == WAITING_FOR_CLICK) {
 		endTurnButton.draw(window);
-		guessText.setTextItems("Guesses:" + std::to_string(numOfGuesses),
-			getV2f(1.25,1.25,true), sf::Color::White, 48);
+		if(agentOnBoardLeft == 0) {
+			guessText.setString("No more Agents\n End Turn!");
+		} else {
+			guessText.setString("Guesses:" + std::to_string(numOfGuesses));
+		}
 		guessText.draw(window);
+	}
+	if(state == SUDDEN_DEATH) {
+		if(opponentsAgentsLeft == 0) {
+			guessText.setString("No more Agents\n Wait on: " + opponentName);
+			guessText.draw(window);
+		}
 	}
 
 	for(int i = 1; i < 10; ++i) {
@@ -103,11 +110,11 @@ void GameScreen::makeActionText() {
 			agentTurn.setString(opponentName + "'s' Turn: Waiting on Hint!");
 			break;
 		}
-		case WAITING_FOR_CLICK: {
+		case WAITING_FOR_CLICK: { //Waiting for user to click codewords
 			agentTurn.setString("Your Turn: Click Codewords!");
 			break; 
 		}
-		case WAITING_FOR_GUESS: {
+		case WAITING_FOR_GUESS: { //Waiting to user to SEND codeword clicks
 			agentTurn.setString(opponentName + "'s' Turn: Waiting on Guesses!");
 			break; 
 		}
@@ -177,7 +184,7 @@ void GameScreen::setUpBoardsMyBoi() {
 		packetBoard << boardPtr->getBoardValues(2);
 		packetBoard << *username;
 
-		for(int i = 0; i < 25;i++) {
+		for(int i = 0; i < 25; i++) {
 			//printDebug("Sending on ClientSide " + boardPtr->words[i] + " " + std::to_string(i));
 			allWords.push_back(boardPtr->words[i]);
 			packetWord << boardPtr->words[i] << i;
@@ -235,6 +242,7 @@ void GameScreen::waitToRecieveGuessFromOtherPlayer() {
 	int cardJ;
 	if( socket->receive(codewordRecieve) == sf::Socket::Disconnected ) {
 		disconnect = true;
+		return;
 	}
 	sf::Mutex mutex;
 	if(codewordRecieve >> cardType >> cardI >> cardJ) {
@@ -256,6 +264,7 @@ void GameScreen::waitToRecieveGuessFromOtherPlayer() {
 				break;
 			}
 			case 2: {
+				boardPtr->boardOneColorsUI[cardI][cardJ].setColor(sf::Color(186, 157, 70));
 				if(suddenDeath) {
 					std::cout << "END THIS MOTHER FUCKER" << std::endl;
 					state = GAMEOVER;
@@ -263,7 +272,6 @@ void GameScreen::waitToRecieveGuessFromOtherPlayer() {
 					return;
 				}
 
-				boardPtr->boardOneColorsUI[cardI][cardJ].setColor(sf::Color(186, 157, 70));
 				state = WAITING_FOR_HINT;
 				turns--;
 				break;
@@ -332,12 +340,13 @@ void GameScreen::checkForAllClicks(sf::RenderWindow & window, bool guessing) {
 			return;
 		}
 
-		for(int i = 0; i < 5;i++) {
+		for(int i = 0; i < 5; i++) {
 			for(int j = 0; j < 5;++j) {
 				if(boardPtr->boardOneColorsUI[i][j].checkClick(window)) {
 					//Not already Pressed!
-					if(alreadyPressed.find((i*5)+j) == alreadyPressed.end()) {
-						alreadyPressed.insert((i*5)+j);
+					int ij25 = (i * 5) + j;
+					if(alreadyPressed.find( ij25 ) == alreadyPressed.end()) {
+						alreadyPressed.insert( ij25 );
 						sf::Packet cardColorPacket;
 						cardColorPacket << boardPtr->boardTwoStructure[i][j] <<  i << j;
 						socket->send(cardColorPacket);
@@ -358,6 +367,7 @@ void GameScreen::checkForAllClicks(sf::RenderWindow & window, bool guessing) {
 										break;
 									}	
 								}
+								opponentsAgentsLeft--;
 								break;
 							}
 							case 1: {
@@ -367,6 +377,7 @@ void GameScreen::checkForAllClicks(sf::RenderWindow & window, bool guessing) {
 								break;
 							}
 							case 2: {
+								boardPtr->boardOneColorsUI[i][j].setColor(sf::Color(186, 157, 70));
 								if(suddenDeath) {
 									std::cout << "trying to end game" << std::endl;
 									state = GAMEOVER;
@@ -377,7 +388,6 @@ void GameScreen::checkForAllClicks(sf::RenderWindow & window, bool guessing) {
 									break;
 								}
 								state = WAITING_FOR_INPUT;
-								boardPtr->boardOneColorsUI[i][j].setColor(sf::Color(186, 157, 70));
 								turns--;
 								break;
 							}
@@ -387,9 +397,9 @@ void GameScreen::checkForAllClicks(sf::RenderWindow & window, bool guessing) {
 			}
 		}
 	} else {
-		for(int i = 0; i < 10;i++) {
+		for(int i = 0; i < 10; i++) {
 			if(allHintNumbers[i].checkClick(window)) {
-				allHintNumbers[hintNum-1].setColor(sf::Color(16,117,24,255));;
+				allHintNumbers[hintNum-1].setColor(sf::Color(16, 117, 24, 255));
 				hintNum = i+1;
 			}
 		}
@@ -422,6 +432,7 @@ int GameScreen::run(sf::RenderWindow & window) {
 		while(window.pollEvent(e)) {
 			if(e.type == sf::Event::Closed || disconnect) {
 				printDebug("TERMINATING WINDOW!");
+	//			window.close();
 				socket->disconnect();
 				return DISCONNECT;
 			} 
@@ -431,7 +442,6 @@ int GameScreen::run(sf::RenderWindow & window) {
 			}
 			if(turns == 0 && !suddenDeath) {
 				win = false;
-				prevState=state;
 				prevState = state;
 				state = SUDDEN_DEATH;
 				suddenDeath=true;
@@ -464,14 +474,19 @@ int GameScreen::run(sf::RenderWindow & window) {
 					socket->setBlocking(false);
 					waitToRecieveGuessFromOtherPlayer();
 					break;
+				}	
+				case GAMEOVER: {
+					break;
 				}				
 				case SUDDEN_DEATH: {
 					socket->setBlocking(true);
+					
 					if(!finalTurn) {
 						finalTurn = true;
-						printDebug("Luanching Final Thread!");
+						printDebug("Launching Final Thread!");
 						thread.launch();
 					}
+
 					numOfGuesses = agentOnBoardLeft;
 					if (e.type == sf::Event::MouseButtonPressed) {
 						checkForAllClicks(window,true);

@@ -4,7 +4,7 @@ Button::Button(std::string displayText, sf::Vector2f location,
 	sf::Vector2f buttonSize, const sf::Color & color, int fontSize, int newBid): 
 	currentText(displayText, sf::Vector2f(location.x + buttonSize.x / 6,
 		location.y - buttonSize.y / 10), sf::Color::White, fontSize, 
-		"fonts/Xpressive Regular.ttf" )
+		FONTF )
 {
 	buttonId = newBid;
     buttonShape.setPosition(location.x, location.y);
@@ -17,7 +17,7 @@ Button::Button(std::string displayText, sf::Vector2f location,
 }
 Button::Button(const Button & b): 	
 	currentText(b.currentText.getString(), b.currentText.getPosition(), 
-		sf::Color::White, 48, "fonts/Xpressive Regular.ttf" )
+		sf::Color::White, 48, FONTF )
 {
 	buttonId = b.buttonId;
     buttonShape.setPosition(b.buttonShape.getPosition().x, 

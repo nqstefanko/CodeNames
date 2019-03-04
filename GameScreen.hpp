@@ -47,6 +47,7 @@ public:
 	int turns;
 	int agents;
 	int agentOnBoardLeft;
+	int opponentsAgentsLeft;
 	int state = 0;
 
 	bool * isServer; 
