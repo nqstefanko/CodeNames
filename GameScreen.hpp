@@ -6,9 +6,8 @@
 #define WAITING_FOR_HINT 101
 #define WAITING_FOR_CLICK 102
 #define WAITING_FOR_GUESS 103
-#define SUDDEN_DEATH_ONE 104
-#define SUDDEN_DEATH_TWO 105
-#define GAMEOVER 106
+#define SUDDEN_DEATH 104
+#define GAMEOVER 105
 
 #include <SFML/Graphics.hpp>
 
@@ -55,6 +54,8 @@ public:
 	bool setUpDone;
 	bool win;
 	bool suddenDeath;
+	bool finalTurn;
+
 
 	Board * boardPtr;
 	sf::TcpSocket * socket;

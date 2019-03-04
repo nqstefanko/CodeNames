@@ -143,7 +143,7 @@ void Board::makeBoardUI() {
 			sf::Vector2f tempButtonLoc(WINDOW_WIDTH/32 + (j * 30) + 
 				((WINDOW_WIDTH/8) * j), WINDOW_HEIGHT/30 + WINDOW_HEIGHT/3 + (20 * i) + 
 				((WINDOW_HEIGHT/10) * i));
-			std::cout << words[count] << std::endl;
+			//std::cout << words[count] << std::endl;
 			std::string s = words[count];
 			Button tempBtn(s, tempButtonLoc, tempButtonSize,
 			sf::Color::Black, WINDOW_WIDTH/38, count);
