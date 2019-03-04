@@ -22,7 +22,7 @@ GameScreen::GameScreen(Board & newBoard,std::string & inputString, bool & userTy
 	setUpDone= false;
 	hintNum = 1;
 	win = false;
-	turns = 1;
+	turns = 9;
 	agentOnBoardLeft = 9;
 	opponentsAgentsLeft = 9;
 	agents = 0;
@@ -420,7 +420,7 @@ int GameScreen::run(sf::RenderWindow & window) {
 		printDebug("Opponents Name is: " + opponentName);
 	}
 
-	sf::Thread thread(&GameScreen::waitToRecieveGuessFromOtherPlayer, this);
+	sf::Thread suddenDeathThread(&GameScreen::waitToRecieveGuessFromOtherPlayer, this);
 	int prevState;
 	updateScreen(window);
 	std::string input = "";
@@ -432,8 +432,8 @@ int GameScreen::run(sf::RenderWindow & window) {
 		while(window.pollEvent(e)) {
 			if(e.type == sf::Event::Closed || disconnect) {
 				printDebug("TERMINATING WINDOW!");
-	//			window.close();
 				socket->disconnect();
+				suddenDeathThread.terminate();
 				return DISCONNECT;
 			} 
 			if(agents == 15) {
@@ -484,7 +484,7 @@ int GameScreen::run(sf::RenderWindow & window) {
 					if(!finalTurn) {
 						finalTurn = true;
 						printDebug("Launching Final Thread!");
-						thread.launch();
+						suddenDeathThread.launch();
 					}
 
 					numOfGuesses = agentOnBoardLeft;

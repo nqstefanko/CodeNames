@@ -12,6 +12,9 @@ extern const int CONN_SCREEN = 2;
 extern const int GAMESCREEN_SCREEN = 3;
 extern const int DISCONNECT = -1;
 extern const std::string FONTF = "fonts/Xpressive Regular.ttf";
+extern const int AGENT = 0;
+extern const int ASSASSIN = 1;
+extern const int BYSTANDER = 2;
 
 sf::Vector2f getV2f(float x, float y, bool divByWindow) {
 	if(divByWindow) {

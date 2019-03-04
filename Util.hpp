@@ -20,6 +20,7 @@ extern const int INPUT_SCREEN;
 extern const int CHOOSE_SCREEN;
 extern const int GAMESCREEN_SCREEN;
 extern const int DISCONNECT;
+
 extern const std::string FONTF;
 
 extern const int ASSASSIN;
