@@ -48,6 +48,7 @@ public:
 	int agents;
 	int agentOnBoardLeft;
 	int opponentsAgentsLeft;
+	int whiteToGreen;
 	int state = 0;
 
 	bool * isServer; 

@@ -33,6 +33,9 @@ int main(int argc, char ** argv) {
 
 	Board gameboard;
 	gameboard.generateBoards();
+	printBoard(gameboard.boardOneStructure);
+	std::cout << std::endl;
+	printBoard(gameboard.boardTwoStructure);
 
 	InputScreen startScreen(username,ip, 
 		std::string("Enter your name (Max 20 Characters)"), 20);

@@ -22,14 +22,14 @@ GameScreen::GameScreen(Board & newBoard,std::string & inputString, bool & userTy
 	setUpDone= false;
 	hintNum = 1;
 	win = false;
-	turns = 9;
+	turns = 2;
 	agentOnBoardLeft = 9;
 	opponentsAgentsLeft = 9;
 	agents = 0;
 	finalTurn = false;
 	disconnect = false;
 
-	for(int i = 1; i < 10; ++i) { //Draw 1-9 Buttons
+	for(int i = 0; i < 10; ++i) { //Draw 1-9 Buttons
 		sf::Vector2f tempButtonSize(WINDOW_WIDTH / 40, WINDOW_HEIGHT / 20);
 		sf::Vector2f tempButtonLoc(WINDOW_WIDTH / 1.35, 
 			WINDOW_HEIGHT / 3.35 +((WINDOW_HEIGHT / 16) + 3) * i );
@@ -47,7 +47,7 @@ void GameScreen::updateScreen(sf::RenderWindow & window) {
 	makeActionText();
 	boardPtr->drawMiniColorBoard(window, 1);
 
-	allHintNumbers[hintNum-1].setColor(sf::Color::Magenta);
+	allHintNumbers[hintNum].setColor(sf::Color::Magenta);
 
 	Text codenamesLogo("Codenames Duet", sf::Vector2f(WINDOW_WIDTH / 3, 0), 
 		sf::Color::Green, 42, FONTF );
@@ -89,8 +89,8 @@ void GameScreen::updateScreen(sf::RenderWindow & window) {
 		}
 	}
 
-	for(int i = 1; i < 10; ++i) {
-		allHintNumbers[i-1].draw(window); //Draw 1-9 Buttons
+	for(int i = 0; i < 10; ++i) {
+		allHintNumbers[i].draw(window); //Draw 1-9 Buttons
 	}
 	
 	currentClue.draw(window);
@@ -133,7 +133,7 @@ void GameScreen::setUpBoardsMyBoi() {
 	std::string s;
 
 	if(*isServer) {//SERVER SIDE!!
-		allHintNumbers[hintNum-1].setColor(sf::Color::Magenta);
+		allHintNumbers[hintNum].setColor(sf::Color::Magenta);
 		std::string b1;
 		std::string b2;
 		std::string oppName;
@@ -164,6 +164,7 @@ void GameScreen::setUpBoardsMyBoi() {
 			boardPtr->setBoard(b1, 2);
 			boardPtr->setBoard(b2, 1);
 			opponentName = oppName;
+			std::cout << "Printing Boards Server!" << std::endl;
 			printBoard(boardPtr->boardOneStructure);//should be mine
 			std::cout << std::endl;
 			printBoard(boardPtr->boardTwoStructure);//should be oppo
@@ -178,7 +179,7 @@ void GameScreen::setUpBoardsMyBoi() {
 	} else {//CLIENT SIDE
 		state = WAITING_FOR_INPUT;
 		printDebug("CLIENT: STATE IS WAINTING FOR INPUT!!");
-		allHintNumbers[hintNum-1].setColor(sf::Color::Magenta);
+		allHintNumbers[hintNum].setColor(sf::Color::Magenta);
 
 		packetBoard << boardPtr->getBoardValues(1);
 		packetBoard << boardPtr->getBoardValues(2);
@@ -202,6 +203,7 @@ void GameScreen::setUpBoardsMyBoi() {
 			opponentName = s;
 		}
 
+		std::cout << "Printing Boards Client!" << std::endl;
 		printBoard(boardPtr->boardOneStructure);//should be mine
 		std::cout << std::endl;
 		printBoard(boardPtr->boardTwoStructure);//should be oppo
@@ -247,7 +249,7 @@ void GameScreen::waitToRecieveGuessFromOtherPlayer() {
 	sf::Mutex mutex;
 	if(codewordRecieve >> cardType >> cardI >> cardJ) {
 		//std::cout << "Got: " << cardType << " " << cardI << " " << cardJ << std::endl;
-		//mutex.lock();
+		mutex.lock();
 		alreadyPressed.insert((cardI*5)+cardJ);
 		switch(cardType) {
 			case 0: {
@@ -264,6 +266,16 @@ void GameScreen::waitToRecieveGuessFromOtherPlayer() {
 				break;
 			}
 			case 2: {
+				if(boardPtr->boardTwoStructure[cardI][cardJ] == 0) {
+					whiteToGreen++;
+					if(whiteToGreen == 4) {
+						std::cout << "Unable to get 15 green!" << std::endl;
+						state = GAMEOVER;
+						win = false;
+						return;
+					}
+					std::cout << "White to Green " << whiteToGreen << std::endl;
+				}
 				boardPtr->boardOneColorsUI[cardI][cardJ].setColor(sf::Color(186, 157, 70));
 				if(suddenDeath) {
 					std::cout << "END THIS MOTHER FUCKER" << std::endl;
@@ -282,7 +294,7 @@ void GameScreen::waitToRecieveGuessFromOtherPlayer() {
 				break;
 			}
 		}
-		//mutex.unlock();
+		mutex.unlock();
 		codewordRecieve.clear();
 	}
 }
@@ -313,9 +325,9 @@ void GameScreen::waitForInput(sf::RenderWindow & window, char inputUnicode,
         inputItem.updateCursor();
 		updateScreen(window);
 	} else if(inputUnicode >= '1' && inputUnicode <= '9') { //Numbers
-		allHintNumbers[hintNum-1].setColor(sf::Color(16,117,24,255));
+		allHintNumbers[hintNum].setColor(sf::Color(16,117,24,255));
 		int numToChange = inputUnicode - '0';
-		hintNum = numToChange-1;
+		hintNum = numToChange;
 	} else { //normal chars
 		if(inputItem.validateInput(inputUnicode) && input.length() <
 			inputItem.maxChar && inputUnicode != '0') {
@@ -378,6 +390,15 @@ void GameScreen::checkForAllClicks(sf::RenderWindow & window, bool guessing) {
 							}
 							case 2: {
 								boardPtr->boardOneColorsUI[i][j].setColor(sf::Color(186, 157, 70));
+								if(boardPtr->boardOneStructure[i][j] == 0) {
+									whiteToGreen++;
+									if(whiteToGreen == 4) {
+										std::cout << "Unable to get 15 green!" << std::endl;
+										state = GAMEOVER;
+										win = false;
+										return;
+									}								
+								}
 								if(suddenDeath) {
 									std::cout << "trying to end game" << std::endl;
 									state = GAMEOVER;
@@ -399,8 +420,8 @@ void GameScreen::checkForAllClicks(sf::RenderWindow & window, bool guessing) {
 	} else {
 		for(int i = 0; i < 10; i++) {
 			if(allHintNumbers[i].checkClick(window)) {
-				allHintNumbers[hintNum-1].setColor(sf::Color(16, 117, 24, 255));
-				hintNum = i+1;
+				allHintNumbers[hintNum].setColor(sf::Color(16, 117, 24, 255));
+				hintNum = i;
 			}
 		}
 	}
