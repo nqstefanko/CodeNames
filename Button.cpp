@@ -12,9 +12,24 @@ Button::Button(std::string displayText, sf::Vector2f location,
     buttonShape.setFillColor(color);
     buttonShape.setOutlineThickness(-1);
     buttonShape.setOutlineColor(sf::Color::White);
-    currentState = false;
+    
+    sf::Vector2f tokenSize(buttonSize.x/5, buttonSize.y/4);
+    playerOneTimerToken.setSize(tokenSize);
+    playerOneTimerToken.setPosition(location.x+tokenSize.x*3, location.y);
+	playerOneTimerToken.setFillColor(sf::Color::Blue);
+    playerOneTimerToken.setOutlineThickness(-1);
+    playerOneTimerToken.setOutlineColor(sf::Color::White);
 
+
+    playerTwoTimerToken.setSize(tokenSize);
+    playerTwoTimerToken.setPosition(location.x+tokenSize.x*4, location.y);
+	playerTwoTimerToken.setFillColor(sf::Color::Red);
+    playerTwoTimerToken.setOutlineThickness(-1);
+    playerTwoTimerToken.setOutlineColor(sf::Color::White);
+
+    currentState = false;
 }
+
 Button::Button(const Button & b): 	
 	currentText(b.currentText.getString(), b.currentText.getPosition(), 
 		sf::Color::White, 48, FONTF )
@@ -26,6 +41,26 @@ Button::Button(const Button & b):
     buttonShape.setFillColor(b.buttonShape.getFillColor());
     buttonShape.setOutlineThickness(-1);
     buttonShape.setOutlineColor(sf::Color::White);
+
+    sf::Vector2f tokenSize(b.buttonShape.getSize().x/5, b.buttonShape.getSize().y/3);
+    playerOneTimerToken.setSize(tokenSize);
+    playerOneTimerToken.setPosition(b.buttonShape.getPosition().x+tokenSize.x*3,
+    	b.buttonShape.getPosition().y);
+	playerOneTimerToken.setFillColor(sf::Color::Blue);
+    playerOneTimerToken.setOutlineThickness(-1);
+    playerOneTimerToken.setOutlineColor(sf::Color::White);
+
+
+    playerTwoTimerToken.setSize(tokenSize);
+    playerTwoTimerToken.setPosition(b.buttonShape.getPosition().x+tokenSize.x*4, 
+    	b.buttonShape.getPosition().y);
+	playerTwoTimerToken.setFillColor(sf::Color::Red);
+    playerTwoTimerToken.setOutlineThickness(-1);
+    playerTwoTimerToken.setOutlineColor(sf::Color::White);
+
+
+    one = false;
+    two = false;
     currentState = false;
 
 }
@@ -41,9 +76,23 @@ void Button::setText(std::string displayText) {
 	currentText.setString(displayText);
 }
 
+void Button::drawTimerTokens(sf::RenderWindow & window) {
+	if(one) {
+		window.draw(playerOneTimerToken);
+	}
+	if(two) {
+		window.draw(playerTwoTimerToken);
+	}
+}
+
 void Button::draw(sf::RenderWindow & window) {
 	window.draw(buttonShape);
+	drawTimerTokens(window);
 	currentText.draw(window);
+}
+
+const sf::Vector2f & Button::getPosition() {
+	return buttonShape.getPosition();
 }
 
 bool Button::checkClick (sf::RenderWindow & window) {

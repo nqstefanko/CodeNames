@@ -58,6 +58,8 @@ public:
 	bool suddenDeath;
 	bool finalTurn;
 	bool disconnect;
+	sf::Color playerColor;
+
 
 
 	std::set<int> alreadyPressed;
@@ -74,6 +76,7 @@ public:
 	Button endTurnButton;
 
 	void setUpBoardsMyBoi();
+	void setProperTurnColor();
 	void sendHintToOtherPlayer();
 	void waitToRecieveHintFromOtherPlayer();
 	void waitToRecieveGuessFromOtherPlayer();

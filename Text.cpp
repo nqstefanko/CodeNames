@@ -39,6 +39,10 @@ std::string Text::getString() const {
 	return theText;
 }
 
+void Text::setColor(sf::Color c) {
+	return currentText.setFillColor(c);
+}
+
 void Text::setString(std::string s) {
 	currentText.setString(s);
 }

@@ -21,6 +21,7 @@ public:
 	
 	void draw(sf::RenderWindow & window);
 	void setPosition(const sf::Vector2f & shift);
+	void setColor(sf::Color c);
 	const sf::Vector2f & getPosition() const;
 	std::string getString() const;
 	const sf::Vector2f & getPosition();

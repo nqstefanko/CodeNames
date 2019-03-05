@@ -13,6 +13,8 @@ class Button
 {
 public:
 	int buttonId;
+	bool one;
+	bool two;
 	Button(std::string displayText, sf::Vector2f location, sf::Vector2f size,
 		const sf::Color & color, int fontSize, int newBid);
 	Button(const Button & b);
@@ -21,10 +23,16 @@ public:
 
 	bool checkClick (sf::RenderWindow & window);
 	void draw(sf::RenderWindow & window);
+	void drawTimerTokens(sf::RenderWindow & window);
+
 	void shiftTextInside(sf::Vector2f & shift);//, sf::RenderWindow & window);
+	const sf::Vector2f & getPosition();
 
 private:
 	sf::RectangleShape buttonShape;
+	sf::RectangleShape playerOneTimerToken;
+	sf::RectangleShape playerTwoTimerToken;
+
 	Text currentText;
 	bool currentState;
 
