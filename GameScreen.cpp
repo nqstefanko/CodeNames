@@ -22,7 +22,7 @@ GameScreen::GameScreen(Board & newBoard,std::string & inputString, bool & userTy
 	setUpDone = false;
 	hintNum = 1;
 	win = false;
-	turns = 2;
+	turns = 9;
 	agentOnBoardLeft = 9;
 	opponentsAgentsLeft = 9;
 	agents = 0;
@@ -39,6 +39,20 @@ GameScreen::GameScreen(Board & newBoard,std::string & inputString, bool & userTy
 }
 
 //204, 232, 255
+
+
+void GameScreen::restartTheGame() {
+	setUpDone = false;
+	hintNum = 1;
+	win = false;
+	turns = 2;
+	agentOnBoardLeft = 9;
+	opponentsAgentsLeft = 9;
+	agents = 0;
+	finalTurn = false;
+	disconnect = false;
+}
+
 
 void GameScreen::updateScreen(sf::RenderWindow & window) {
 	window.clear(sf::Color::Black);

@@ -80,6 +80,7 @@ public:
 	void sendHintToOtherPlayer();
 	void waitToRecieveHintFromOtherPlayer();
 	void waitToRecieveGuessFromOtherPlayer();
+	void restartTheGame();
 
 	void waitForInput(sf::RenderWindow & window, char inputUnicode, 
 		std::string& input);
